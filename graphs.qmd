@@ -1,7 +1,11 @@
 ---
-self-contained: true
-
-
+title: "My document"
+format:
+  html:
+    toc: true
+    html-math-method: katex
+    css: styles.css
+    self-contained: true
 ---
 
 ```{python}
@@ -97,47 +101,6 @@ fig.update_traces(
 
 # Show the plot
 fig.show()
-
-
-
-```
-
-
-```{python}
-import plotly.graph_objects as go
-import ipywidgets as widgets
-from IPython.display import display
-
-def create_traces_for_offense(offense):
-    if offense == 'All':
-        return [go.Scatter(x=df['data_year'], y=df[offense], mode='lines', name=offense) for offense in df.columns if offense != 'data_year']
-    else:
-        return [go.Scatter(x=df['data_year'], y=df[offense], mode='lines', name=offense)]
-
-
-offense_selector = widgets.Dropdown(
-    options=['All'] + list(df.columns[1:]),
-    value='All',
-    description='Offense:',
-)
-
-# Plot updating function
-def update_plot(change):
-    offense = change['new']
-    traces = create_traces_for_offense(offense)
-    with fig.batch_update(): 
-        fig.data = [] 
-        fig.add_traces(traces) 
-        fig.update_layout(title=f'Arrests by Offense: {offense}') # Optional: Update title
-
-offense_selector.observe(update_plot, names='value')
-
-fig = go.Figure(create_traces_for_offense('All'))
-fig.update_layout(title='Arrests by Offense: All', xaxis_title='Year', yaxis_title='Number of Arrests')
-
-display(offense_selector)
-fig.show()
-
 
 
 
