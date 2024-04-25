@@ -1,0 +1,144 @@
+---
+self-contained: true
+
+
+---
+
+```{python}
+import plotly.graph_objects as go
+import pandas as pd
+
+
+df = pd.read_csv('data/Dheeraj_data/national_arrests.csv')
+
+
+traces = []
+for offense in df.columns[1:]:  
+    traces.append(go.Scatter(
+        x=df['data_year'],
+        y=df[offense],
+        mode='lines',
+        name=offense
+    ))
+
+fig = go.Figure(traces)
+
+
+fig.update_layout(
+    title='All Arrest by Offense Year-Over-Year',
+    xaxis_title='Year',
+    yaxis_title='Number of Arrests',
+    hovermode='x unified'  
+)
+
+
+fig.show()
+
+
+```
+
+
+```{python}
+import plotly.graph_objects as go
+import pandas as pd
+
+
+df = pd.read_csv('data/Dheeraj_data/national_arrests.csv')
+# Create traces for each offense
+traces = []
+for offense in df.columns[1:]:  
+    traces.append(go.Scatter(
+        x=df['data_year'],
+        y=df[offense],
+        mode='lines+markers',  
+        line=dict(width=2),  
+        marker=dict(size=4),  
+        text=offense,  
+        hoverinfo='y+text'  
+    ))
+
+
+fig = go.Figure(traces)
+
+
+fig.update_layout(
+    title='All Arrest by Offense Year-Over-Year',
+    xaxis_title='Year',
+    yaxis_title='Number of Arrests',
+    hovermode='closest',  
+    legend=dict( 
+        title=dict(text='Offenses'),
+        orientation='h',  
+        yanchor='bottom',
+        y=1.02,  
+        xanchor='right',
+        x=1
+    ),
+    width=800, 
+    height=600  
+)
+
+fig.add_vline(x=2020, line_width=2, line_dash="dash", line_color="red")
+
+
+fig.add_annotation(
+    x=2020, y=max(df.max()),  
+    text="Start of COVID-19 impact",
+    showarrow=True,
+    arrowhead=1,
+    ax=-50,
+    ay=0
+)
+
+
+fig.update_traces(
+    hoverlabel=dict(namelength=-1) 
+)
+
+# Show the plot
+fig.show()
+
+
+
+```
+
+
+```{python}
+import plotly.graph_objects as go
+import ipywidgets as widgets
+from IPython.display import display
+
+def create_traces_for_offense(offense):
+    if offense == 'All':
+        return [go.Scatter(x=df['data_year'], y=df[offense], mode='lines', name=offense) for offense in df.columns if offense != 'data_year']
+    else:
+        return [go.Scatter(x=df['data_year'], y=df[offense], mode='lines', name=offense)]
+
+
+offense_selector = widgets.Dropdown(
+    options=['All'] + list(df.columns[1:]),
+    value='All',
+    description='Offense:',
+)
+
+# Plot updating function
+def update_plot(change):
+    offense = change['new']
+    traces = create_traces_for_offense(offense)
+    with fig.batch_update(): 
+        fig.data = [] 
+        fig.add_traces(traces) 
+        fig.update_layout(title=f'Arrests by Offense: {offense}') # Optional: Update title
+
+offense_selector.observe(update_plot, names='value')
+
+fig = go.Figure(create_traces_for_offense('All'))
+fig.update_layout(title='Arrests by Offense: All', xaxis_title='Year', yaxis_title='Number of Arrests')
+
+display(offense_selector)
+fig.show()
+
+
+
+
+```

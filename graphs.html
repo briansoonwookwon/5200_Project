@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>graphs</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="graphs_files/libs/clipboard/clipboard.min.js"></script>
+<script src="graphs_files/libs/quarto-html/quarto.js"></script>
+<script src="graphs_files/libs/quarto-html/popper.min.js"></script>
+<script src="graphs_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="graphs_files/libs/quarto-html/anchor.min.js"></script>
+<link href="graphs_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="graphs_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="graphs_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="graphs_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="graphs_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+<script type="text/javascript">
+window.PlotlyConfig = {MathJaxConfig: 'local'};
+if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}
+if (typeof require !== 'undefined') {
+require.undef("plotly");
+requirejs.config({
+    paths: {
+        'plotly': ['https://cdn.plot.ly/plotly-2.12.1.min']
+    }
+});
+require(['plotly'], function(Plotly) {
+    window._Plotly = Plotly;
+});
+}
+</script>
+
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+
+
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> plotly.graph_objects <span class="im">as</span> go</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Let's assume 'df' is your DataFrame after reading the CSV</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">'data/Dheeraj_data/national_arrests.csv'</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Create traces for each offense</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>traces <span class="op">=</span> []</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> offense <span class="kw">in</span> df.columns[<span class="dv">1</span>:]:  <span class="co"># Assuming the first column is 'data_year'</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    traces.append(go.Scatter(</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>        x<span class="op">=</span>df[<span class="st">'data_year'</span>],</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>        y<span class="op">=</span>df[offense],</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>        mode<span class="op">=</span><span class="st">'lines'</span>,</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>        name<span class="op">=</span>offense</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    ))</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the figure with all the traces</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> go.Figure(traces)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Update layout with titles and axes labels</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>fig.update_layout(</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    title<span class="op">=</span><span class="st">'All Arrest by Offense Year-Over-Year'</span>,</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    xaxis_title<span class="op">=</span><span class="st">'Year'</span>,</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    yaxis_title<span class="op">=</span><span class="st">'Number of Arrests'</span>,</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    hovermode<span class="op">=</span><span class="st">'x unified'</span>  <span class="co"># Groups hover info at the vertical level</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Show the plot</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>fig.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+
+<div>                            <div id="a97d8028-bdea-4ffe-bb52-08d7c4b95ac5" class="plotly-graph-div" style="height:525px; width:100%;"></div>            <script type="text/javascript">                require(["plotly"], function(Plotly) {                    window.PLOTLYENV=window.PLOTLYENV || {};                                    if (document.getElementById("a97d8028-bdea-4ffe-bb52-08d7c4b95ac5")) {                    Plotly.newPlot(                        "a97d8028-bdea-4ffe-bb52-08d7c4b95ac5",                        [{"mode":"lines","name":"Aggravated Assault","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[321079,316668,307233,315085,320521,352787,331292,347356,334452,204843,287544],"type":"scatter"},{"mode":"lines","name":"All Other Offenses (Except Traffic)","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[2866554,3025308,2695110,2729688,2767483,3126588,2805416,2942824,2051465,1762945,2076644],"type":"scatter"},{"mode":"lines","name":"Arson","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[9877,8858,7867,7519,8342,8426,7739,7686,8398,5673,8048],"type":"scatter"},{"mode":"lines","name":"Burglary","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[235966,214633,197999,182360,175765,185661,151993,153840,134800,76194,102326],"type":"scatter"},{"mode":"lines","name":"Curfew and Loitering Law Violations","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[59859,49518,42752,36353,27901,24708,17937,15768,10188,5988,5993],"type":"scatter"},{"mode":"lines","name":"Disorderly Conduct","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[455543,445989,364603,336442,317162,302239,280106,262768,200961,176751,209049],"type":"scatter"},{"mode":"lines","name":"Driving Under the Influence","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[1047034,1087252,961475,898058,860509,857880,817973,797848,646550,542421,651889],"type":"scatter"},{"mode":"lines","name":"Drug Abuse Violations - Grand Total","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[1224311,1420659,1279343,1166244,1253038,1365715,1367942,1247060,938869,665251,766595],"type":"scatter"},{"mode":"lines","name":"Drunkenness","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[416525,508815,347008,345435,315310,308485,280305,259233,159251,299,19866],"type":"scatter"},{"mode":"lines","name":"Embezzlement","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[13090,13218,13309,13408,13681,14522,12394,12338,8249,5696,8040],"type":"scatter"},{"mode":"lines","name":"Forgery and Counterfeiting","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[55454,51398,47083,46492,48008,49103,43133,41181,27666,17766,24726],"type":"scatter"},{"mode":"lines","name":"Fraud","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[127088,120227,116857,113014,109876,118531,103931,107077,73462,52693,65991],"type":"scatter"},{"mode":"lines","name":"Gambling - Total","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[6356,5320,4532,3852,3058,2746,2811,2291,1612,850,1208],"type":"scatter"},{"mode":"lines","name":"Human Trafficking - Commercial Sex Acts","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[0,0,0,0,3,396,540,534,377,361,402],"type":"scatter"},{"mode":"lines","name":"Human Trafficking - Involuntary Servitude","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[0,0,0,0,0,252,89,283,187,86,117],"type":"scatter"},{"mode":"lines","name":"Larceny - Theft","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[1069633,1137084,1040663,984109,893307,880968,763604,780036,573950,374656,493827],"type":"scatter"},{"mode":"lines","name":"Liquor Laws","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[370037,453422,266683,228802,199230,190054,150025,146908,95016,75819,80080],"type":"scatter"},{"mode":"lines","name":"Manslaughter by Negligence","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[956,890,920,923,999,1103,1010,1169,1332,921,1159],"type":"scatter"},{"mode":"lines","name":"Motor Vehicle Theft","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[56961,75846,56934,64651,71552,83990,75929,75277,74255,48924,65396],"type":"scatter"},{"mode":"lines","name":"Murder and Nonnegligent Manslaughter","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[9067,9012,8816,9614,10060,10967,10231,10129,11695,8754,10507],"type":"scatter"},{"mode":"lines","name":"Offenses Against the Family and Children","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[90183,124613,82848,83114,79759,82500,78607,69806,51471,37973,40290],"type":"scatter"},{"mode":"lines","name":"Prostitution and Commercialized Vice","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[44995,43525,38493,33847,31306,32275,25318,24333,13744,8474,13026],"type":"scatter"},{"mode":"lines","name":"Rape","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[15558,16121,17532,19218,19674,22180,21145,22094,19658,14530,16775],"type":"scatter"},{"mode":"lines","name":"Robbery","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[85272,83383,78343,79659,79818,84747,73281,72377,61915,33071,49915],"type":"scatter"},{"mode":"lines","name":"Sex Offenses (Except Rape, and Prostitution and Commercialized Vice)","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[56752,48797,45646,43949,42620,43501,39143,38645,29292,13537,21445],"type":"scatter"},{"mode":"lines","name":"Simple Assault","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[993584,969840,909509,913474,911044,982284,896888,923973,818528,661505,800695],"type":"scatter"},{"mode":"lines","name":"Stolen Property: Buying, Receiving, Possessing","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[81302,88426,73628,74439,79979,85833,80972,76660,72624,51455,70931],"type":"scatter"},{"mode":"lines","name":"Suspicion","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[1447,10989,1118,2286,1373,933,614,1325,460,7,63],"type":"scatter"},{"mode":"lines","name":"Vagrancy","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[22367,21982,23172,21781,20498,19215,19183,17677,11880,8989,13210],"type":"scatter"},{"mode":"lines","name":"Vandalism","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[188462,190782,164461,161733,164600,167086,152096,153925,145925,110734,138479],"type":"scatter"},{"mode":"lines","name":"Weapons: Carrying, Possessing, Etc.","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[122621,118905,116109,121292,131733,144970,140287,135531,142331,113424,152535],"type":"scatter"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmapgl":[{"type":"heatmapgl","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}},"title":{"text":"All Arrest by Offense Year-Over-Year"},"xaxis":{"title":{"text":"Year"}},"yaxis":{"title":{"text":"Number of Arrests"}},"hovermode":"x unified"},                        {"responsive": true}                    ).then(function(){
+                            
+var gd = document.getElementById('a97d8028-bdea-4ffe-bb52-08d7c4b95ac5');
+var x = new MutationObserver(function (mutations, observer) {{
+        var display = window.getComputedStyle(gd).display;
+        if (!display || display === 'none') {{
+            console.log([gd, 'removed!']);
+            Plotly.purge(gd);
+            observer.disconnect();
+        }}
+}});
+
+// Listen for the removal of the full notebook cells
+var notebookContainer = gd.closest('#notebook-container');
+if (notebookContainer) {{
+    x.observe(notebookContainer, {childList: true});
+}}
+
+// Listen for the clearing of the current output cell
+var outputEl = gd.closest('.output');
+if (outputEl) {{
+    x.observe(outputEl, {childList: true});
+}}
+
+                        })                };                });            </script>        </div>
+</div>
+</div>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> plotly.graph_objects <span class="im">as</span> go</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">'data/Dheeraj_data/national_arrests.csv'</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Create traces for each offense</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>traces <span class="op">=</span> []</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> offense <span class="kw">in</span> df.columns[<span class="dv">1</span>:]:  <span class="co"># Assuming the first column is 'data_year'</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    traces.append(go.Scatter(</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>        x<span class="op">=</span>df[<span class="st">'data_year'</span>],</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>        y<span class="op">=</span>df[offense],</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>        mode<span class="op">=</span><span class="st">'lines+markers'</span>,  <span class="co"># Use both lines and markers</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>        name<span class="op">=</span>offense,</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>        line<span class="op">=</span><span class="bu">dict</span>(width<span class="op">=</span><span class="dv">2</span>),  <span class="co"># Increase line width for visibility</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>        marker<span class="op">=</span><span class="bu">dict</span>(size<span class="op">=</span><span class="dv">4</span>),  <span class="co"># Adjust marker size as needed</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>        text<span class="op">=</span>offense,  <span class="co"># Set the hover text to offense name</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>        hoverinfo<span class="op">=</span><span class="st">'y+text'</span>  <span class="co"># Show only the y-value and offense name on hover</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    ))</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the figure with all the traces</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> go.Figure(traces)</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Update layout with titles and axes labels</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>fig.update_layout(</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>    title<span class="op">=</span><span class="st">'All Arrest by Offense Year-Over-Year'</span>,</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>    xaxis_title<span class="op">=</span><span class="st">'Year'</span>,</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>    yaxis_title<span class="op">=</span><span class="st">'Number of Arrests'</span>,</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>    hovermode<span class="op">=</span><span class="st">'closest'</span>,  <span class="co"># Show hover info for the closest point</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>    legend<span class="op">=</span><span class="bu">dict</span>(  <span class="co"># Adjust the legend's appearance</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>        title<span class="op">=</span><span class="bu">dict</span>(text<span class="op">=</span><span class="st">'Offenses'</span>),</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>        orientation<span class="op">=</span><span class="st">'h'</span>,  <span class="co"># Horizontal layout to save vertical space</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>        yanchor<span class="op">=</span><span class="st">'bottom'</span>,</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>        y<span class="op">=</span><span class="fl">1.02</span>,  <span class="co"># Position the legend above the plot</span></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>        xanchor<span class="op">=</span><span class="st">'right'</span>,</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>        x<span class="op">=</span><span class="dv">1</span></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>    width<span class="op">=</span><span class="dv">800</span>,  <span class="co"># Wider plot</span></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>    height<span class="op">=</span><span class="dv">600</span>  <span class="co"># Taller plot</span></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>fig.add_vline(x<span class="op">=</span><span class="dv">2020</span>, line_width<span class="op">=</span><span class="dv">2</span>, line_dash<span class="op">=</span><span class="st">"dash"</span>, line_color<span class="op">=</span><span class="st">"red"</span>)</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a><span class="co"># Add annotation to the vertical line</span></span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>fig.add_annotation(</span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="dv">2020</span>, y<span class="op">=</span><span class="bu">max</span>(df.<span class="bu">max</span>()),  <span class="co"># Adjust the y position according to your data</span></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>    text<span class="op">=</span><span class="st">"Start of COVID-19 impact"</span>,</span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>    showarrow<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>    arrowhead<span class="op">=</span><span class="dv">1</span>,</span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>    ax<span class="op">=-</span><span class="dv">50</span>,</span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>    ay<span class="op">=</span><span class="dv">0</span></span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a><span class="co"># Add interactive hover functionality to toggle traces on and off</span></span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a>fig.update_traces(</span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>    hoverlabel<span class="op">=</span><span class="bu">dict</span>(namelength<span class="op">=-</span><span class="dv">1</span>)  <span class="co"># Show full name of the offense on hover</span></span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a><span class="co"># Show the plot</span></span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>fig.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+
+<div>                            <div id="98257562-49d9-4a35-a6a2-27f2a2c9ac40" class="plotly-graph-div" style="height:600px; width:800px;"></div>            <script type="text/javascript">                require(["plotly"], function(Plotly) {                    window.PLOTLYENV=window.PLOTLYENV || {};                                    if (document.getElementById("98257562-49d9-4a35-a6a2-27f2a2c9ac40")) {                    Plotly.newPlot(                        "98257562-49d9-4a35-a6a2-27f2a2c9ac40",                        [{"hoverinfo":"y+text","line":{"width":2},"marker":{"size":4},"mode":"lines+markers","name":"Aggravated Assault","text":"Aggravated Assault","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[321079,316668,307233,315085,320521,352787,331292,347356,334452,204843,287544],"type":"scatter","hoverlabel":{"namelength":-1}},{"hoverinfo":"y+text","line":{"width":2},"marker":{"size":4},"mode":"lines+markers","name":"All Other Offenses (Except Traffic)","text":"All Other Offenses (Except Traffic)","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[2866554,3025308,2695110,2729688,2767483,3126588,2805416,2942824,2051465,1762945,2076644],"type":"scatter","hoverlabel":{"namelength":-1}},{"hoverinfo":"y+text","line":{"width":2},"marker":{"size":4},"mode":"lines+markers","name":"Arson","text":"Arson","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[9877,8858,7867,7519,8342,8426,7739,7686,8398,5673,8048],"type":"scatter","hoverlabel":{"namelength":-1}},{"hoverinfo":"y+text","line":{"width":2},"marker":{"size":4},"mode":"lines+markers","name":"Burglary","text":"Burglary","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[235966,214633,197999,182360,175765,185661,151993,153840,134800,76194,102326],"type":"scatter","hoverlabel":{"namelength":-1}},{"hoverinfo":"y+text","line":{"width":2},"marker":{"size":4},"mode":"lines+markers","name":"Curfew and Loitering Law Violations","text":"Curfew and Loitering Law Violations","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[59859,49518,42752,36353,27901,24708,17937,15768,10188,5988,5993],"type":"scatter","hoverlabel":{"namelength":-1}},{"hoverinfo":"y+text","line":{"width":2},"marker":{"size":4},"mode":"lines+markers","name":"Disorderly Conduct","text":"Disorderly Conduct","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[455543,445989,364603,336442,317162,302239,280106,262768,200961,176751,209049],"type":"scatter","hoverlabel":{"namelength":-1}},{"hoverinfo":"y+text","line":{"width":2},"marker":{"size":4},"mode":"lines+markers","name":"Driving Under the Influence","text":"Driving Under the Influence","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[1047034,1087252,961475,898058,860509,857880,817973,797848,646550,542421,651889],"type":"scatter","hoverlabel":{"namelength":-1}},{"hoverinfo":"y+text","line":{"width":2},"marker":{"size":4},"mode":"lines+markers","name":"Drug Abuse Violations - Grand Total","text":"Drug Abuse Violations - Grand Total","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[1224311,1420659,1279343,1166244,1253038,1365715,1367942,1247060,938869,665251,766595],"type":"scatter","hoverlabel":{"namelength":-1}},{"hoverinfo":"y+text","line":{"width":2},"marker":{"size":4},"mode":"lines+markers","name":"Drunkenness","text":"Drunkenness","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[416525,508815,347008,345435,315310,308485,280305,259233,159251,299,19866],"type":"scatter","hoverlabel":{"namelength":-1}},{"hoverinfo":"y+text","line":{"width":2},"marker":{"size":4},"mode":"lines+markers","name":"Embezzlement","text":"Embezzlement","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[13090,13218,13309,13408,13681,14522,12394,12338,8249,5696,8040],"type":"scatter","hoverlabel":{"namelength":-1}},{"hoverinfo":"y+text","line":{"width":2},"marker":{"size":4},"mode":"lines+markers","name":"Forgery and Counterfeiting","text":"Forgery and Counterfeiting","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[55454,51398,47083,46492,48008,49103,43133,41181,27666,17766,24726],"type":"scatter","hoverlabel":{"namelength":-1}},{"hoverinfo":"y+text","line":{"width":2},"marker":{"size":4},"mode":"lines+markers","name":"Fraud","text":"Fraud","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[127088,120227,116857,113014,109876,118531,103931,107077,73462,52693,65991],"type":"scatter","hoverlabel":{"namelength":-1}},{"hoverinfo":"y+text","line":{"width":2},"marker":{"size":4},"mode":"lines+markers","name":"Gambling - Total","text":"Gambling - Total","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[6356,5320,4532,3852,3058,2746,2811,2291,1612,850,1208],"type":"scatter","hoverlabel":{"namelength":-1}},{"hoverinfo":"y+text","line":{"width":2},"marker":{"size":4},"mode":"lines+markers","name":"Human Trafficking - Commercial Sex Acts","text":"Human Trafficking - Commercial Sex Acts","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[0,0,0,0,3,396,540,534,377,361,402],"type":"scatter","hoverlabel":{"namelength":-1}},{"hoverinfo":"y+text","line":{"width":2},"marker":{"size":4},"mode":"lines+markers","name":"Human Trafficking - Involuntary Servitude","text":"Human Trafficking - Involuntary Servitude","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[0,0,0,0,0,252,89,283,187,86,117],"type":"scatter","hoverlabel":{"namelength":-1}},{"hoverinfo":"y+text","line":{"width":2},"marker":{"size":4},"mode":"lines+markers","name":"Larceny - Theft","text":"Larceny - Theft","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[1069633,1137084,1040663,984109,893307,880968,763604,780036,573950,374656,493827],"type":"scatter","hoverlabel":{"namelength":-1}},{"hoverinfo":"y+text","line":{"width":2},"marker":{"size":4},"mode":"lines+markers","name":"Liquor Laws","text":"Liquor Laws","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[370037,453422,266683,228802,199230,190054,150025,146908,95016,75819,80080],"type":"scatter","hoverlabel":{"namelength":-1}},{"hoverinfo":"y+text","line":{"width":2},"marker":{"size":4},"mode":"lines+markers","name":"Manslaughter by Negligence","text":"Manslaughter by Negligence","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[956,890,920,923,999,1103,1010,1169,1332,921,1159],"type":"scatter","hoverlabel":{"namelength":-1}},{"hoverinfo":"y+text","line":{"width":2},"marker":{"size":4},"mode":"lines+markers","name":"Motor Vehicle Theft","text":"Motor Vehicle Theft","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[56961,75846,56934,64651,71552,83990,75929,75277,74255,48924,65396],"type":"scatter","hoverlabel":{"namelength":-1}},{"hoverinfo":"y+text","line":{"width":2},"marker":{"size":4},"mode":"lines+markers","name":"Murder and Nonnegligent Manslaughter","text":"Murder and Nonnegligent Manslaughter","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[9067,9012,8816,9614,10060,10967,10231,10129,11695,8754,10507],"type":"scatter","hoverlabel":{"namelength":-1}},{"hoverinfo":"y+text","line":{"width":2},"marker":{"size":4},"mode":"lines+markers","name":"Offenses Against the Family and Children","text":"Offenses Against the Family and Children","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[90183,124613,82848,83114,79759,82500,78607,69806,51471,37973,40290],"type":"scatter","hoverlabel":{"namelength":-1}},{"hoverinfo":"y+text","line":{"width":2},"marker":{"size":4},"mode":"lines+markers","name":"Prostitution and Commercialized Vice","text":"Prostitution and Commercialized Vice","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[44995,43525,38493,33847,31306,32275,25318,24333,13744,8474,13026],"type":"scatter","hoverlabel":{"namelength":-1}},{"hoverinfo":"y+text","line":{"width":2},"marker":{"size":4},"mode":"lines+markers","name":"Rape","text":"Rape","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[15558,16121,17532,19218,19674,22180,21145,22094,19658,14530,16775],"type":"scatter","hoverlabel":{"namelength":-1}},{"hoverinfo":"y+text","line":{"width":2},"marker":{"size":4},"mode":"lines+markers","name":"Robbery","text":"Robbery","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[85272,83383,78343,79659,79818,84747,73281,72377,61915,33071,49915],"type":"scatter","hoverlabel":{"namelength":-1}},{"hoverinfo":"y+text","line":{"width":2},"marker":{"size":4},"mode":"lines+markers","name":"Sex Offenses (Except Rape, and Prostitution and Commercialized Vice)","text":"Sex Offenses (Except Rape, and Prostitution and Commercialized Vice)","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[56752,48797,45646,43949,42620,43501,39143,38645,29292,13537,21445],"type":"scatter","hoverlabel":{"namelength":-1}},{"hoverinfo":"y+text","line":{"width":2},"marker":{"size":4},"mode":"lines+markers","name":"Simple Assault","text":"Simple Assault","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[993584,969840,909509,913474,911044,982284,896888,923973,818528,661505,800695],"type":"scatter","hoverlabel":{"namelength":-1}},{"hoverinfo":"y+text","line":{"width":2},"marker":{"size":4},"mode":"lines+markers","name":"Stolen Property: Buying, Receiving, Possessing","text":"Stolen Property: Buying, Receiving, Possessing","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[81302,88426,73628,74439,79979,85833,80972,76660,72624,51455,70931],"type":"scatter","hoverlabel":{"namelength":-1}},{"hoverinfo":"y+text","line":{"width":2},"marker":{"size":4},"mode":"lines+markers","name":"Suspicion","text":"Suspicion","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[1447,10989,1118,2286,1373,933,614,1325,460,7,63],"type":"scatter","hoverlabel":{"namelength":-1}},{"hoverinfo":"y+text","line":{"width":2},"marker":{"size":4},"mode":"lines+markers","name":"Vagrancy","text":"Vagrancy","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[22367,21982,23172,21781,20498,19215,19183,17677,11880,8989,13210],"type":"scatter","hoverlabel":{"namelength":-1}},{"hoverinfo":"y+text","line":{"width":2},"marker":{"size":4},"mode":"lines+markers","name":"Vandalism","text":"Vandalism","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[188462,190782,164461,161733,164600,167086,152096,153925,145925,110734,138479],"type":"scatter","hoverlabel":{"namelength":-1}},{"hoverinfo":"y+text","line":{"width":2},"marker":{"size":4},"mode":"lines+markers","name":"Weapons: Carrying, Possessing, Etc.","text":"Weapons: Carrying, Possessing, Etc.","x":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"y":[122621,118905,116109,121292,131733,144970,140287,135531,142331,113424,152535],"type":"scatter","hoverlabel":{"namelength":-1}}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmapgl":[{"type":"heatmapgl","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}},"legend":{"title":{"text":"Offenses"},"orientation":"h","yanchor":"bottom","y":1.02,"xanchor":"right","x":1},"title":{"text":"All Arrest by Offense Year-Over-Year"},"xaxis":{"title":{"text":"Year"}},"yaxis":{"title":{"text":"Number of Arrests"}},"hovermode":"closest","width":800,"height":600,"shapes":[{"line":{"color":"red","dash":"dash","width":2},"type":"line","x0":2020,"x1":2020,"xref":"x","y0":0,"y1":1,"yref":"y domain"}],"annotations":[{"arrowhead":1,"ax":-50,"ay":0,"showarrow":true,"text":"Start of COVID-19 impact","x":2020,"y":3126588}]},                        {"responsive": true}                    ).then(function(){
+                            
+var gd = document.getElementById('98257562-49d9-4a35-a6a2-27f2a2c9ac40');
+var x = new MutationObserver(function (mutations, observer) {{
+        var display = window.getComputedStyle(gd).display;
+        if (!display || display === 'none') {{
+            console.log([gd, 'removed!']);
+            Plotly.purge(gd);
+            observer.disconnect();
+        }}
+}});
+
+// Listen for the removal of the full notebook cells
+var notebookContainer = gd.closest('#notebook-container');
+if (notebookContainer) {{
+    x.observe(notebookContainer, {childList: true});
+}}
+
+// Listen for the clearing of the current output cell
+var outputEl = gd.closest('.output');
+if (outputEl) {{
+    x.observe(outputEl, {childList: true});
+}}
+
+                        })                };                });            </script>        </div>
+</div>
+</div>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
