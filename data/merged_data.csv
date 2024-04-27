@@ -1,0 +1,84 @@
+,OFFENSE_TYPE_ID,OFFENSE_NAME,LOCATION_NAME,OFFENSE_COUNT
+0,2,False Pretenses/Swindle/Confidence Game,Air/Bus/Train Terminal,3
+1,2,False Pretenses/Swindle/Confidence Game,Parking/Drop Lot/Garage,1
+2,4,Sexual Assault With An Object,Highway/Road/Alley/Street/Sidewalk,1
+3,5,Destruction/Damage/Vandalism of Property,Air/Bus/Train Terminal,139
+4,5,Destruction/Damage/Vandalism of Property,Commercial/Office Building,2
+5,5,Destruction/Damage/Vandalism of Property,Highway/Road/Alley/Street/Sidewalk,176
+6,5,Destruction/Damage/Vandalism of Property,Other/Unknown,33
+7,5,Destruction/Damage/Vandalism of Property,Parking/Drop Lot/Garage,78
+8,7,Theft of Motor Vehicle Parts or Accessories,Air/Bus/Train Terminal,1
+9,7,Theft of Motor Vehicle Parts or Accessories,Highway/Road/Alley/Street/Sidewalk,1
+10,7,Theft of Motor Vehicle Parts or Accessories,Parking/Drop Lot/Garage,24
+11,11,Counterfeiting/Forgery,Air/Bus/Train Terminal,1
+12,11,Counterfeiting/Forgery,Other/Unknown,1
+13,11,Counterfeiting/Forgery,Parking/Drop Lot/Garage,2
+14,13,Pocket-picking,Air/Bus/Train Terminal,12
+15,13,Pocket-picking,Highway/Road/Alley/Street/Sidewalk,2
+16,14,Theft From Motor Vehicle,Air/Bus/Train Terminal,2
+17,14,Theft From Motor Vehicle,Commercial/Office Building,1
+18,14,Theft From Motor Vehicle,Highway/Road/Alley/Street/Sidewalk,1
+19,14,Theft From Motor Vehicle,Other/Unknown,1
+20,14,Theft From Motor Vehicle,Parking/Drop Lot/Garage,40
+21,16,Drug/Narcotic Violations,Air/Bus/Train Terminal,217
+22,16,Drug/Narcotic Violations,Highway/Road/Alley/Street/Sidewalk,66
+23,16,Drug/Narcotic Violations,Other/Unknown,1
+24,16,Drug/Narcotic Violations,Parking/Drop Lot/Garage,21
+25,18,Purse-snatching,Air/Bus/Train Terminal,97
+26,18,Purse-snatching,Highway/Road/Alley/Street/Sidewalk,20
+27,18,Purse-snatching,Parking/Drop Lot/Garage,1
+28,20,Arson,Air/Bus/Train Terminal,2
+29,21,Motor Vehicle Theft,Air/Bus/Train Terminal,4
+30,21,Motor Vehicle Theft,Highway/Road/Alley/Street/Sidewalk,2
+31,21,Motor Vehicle Theft,Parking/Drop Lot/Garage,23
+32,27,Aggravated Assault,Air/Bus/Train Terminal,83
+33,27,Aggravated Assault,Highway/Road/Alley/Street/Sidewalk,30
+34,27,Aggravated Assault,Parking/Drop Lot/Garage,7
+35,28,Stolen Property Offenses,Air/Bus/Train Terminal,14
+36,28,Stolen Property Offenses,Grocery/Supermarket,1
+37,29,Kidnapping/Abduction,Air/Bus/Train Terminal,2
+38,29,Kidnapping/Abduction,Highway/Road/Alley/Street/Sidewalk,1
+39,32,Murder and Nonnegligent Manslaughter,Air/Bus/Train Terminal,3
+40,35,Drug Equipment Violations,Air/Bus/Train Terminal,21
+41,35,Drug Equipment Violations,Highway/Road/Alley/Street/Sidewalk,1
+42,35,Drug Equipment Violations,Parking/Drop Lot/Garage,3
+43,36,Rape,Air/Bus/Train Terminal,3
+44,39,Weapon Law Violations,Air/Bus/Train Terminal,63
+45,39,Weapon Law Violations,Convenience Store,1
+46,39,Weapon Law Violations,Grocery/Supermarket,1
+47,39,Weapon Law Violations,Highway/Road/Alley/Street/Sidewalk,9
+48,39,Weapon Law Violations,Parking/Drop Lot/Garage,2
+49,39,Weapon Law Violations,Residence/Home,1
+50,40,Robbery,Air/Bus/Train Terminal,133
+51,40,Robbery,Highway/Road/Alley/Street/Sidewalk,19
+52,40,Robbery,Parking/Drop Lot/Garage,13
+53,41,Credit Card/Automated Teller Machine Fraud,Air/Bus/Train Terminal,2
+54,44,Intimidation,Air/Bus/Train Terminal,58
+55,44,Intimidation,Commercial/Office Building,1
+56,44,Intimidation,Government/Public Building,1
+57,44,Intimidation,Highway/Road/Alley/Street/Sidewalk,37
+58,44,Intimidation,Other/Unknown,1
+59,45,All Other Larceny,Air/Bus/Train Terminal,165
+60,45,All Other Larceny,Commercial/Office Building,2
+61,45,All Other Larceny,Government/Public Building,1
+62,45,All Other Larceny,Highway/Road/Alley/Street/Sidewalk,21
+63,45,All Other Larceny,Other/Unknown,4
+64,45,All Other Larceny,Parking/Drop Lot/Garage,3
+65,46,Impersonation,Commercial/Office Building,2
+66,46,Impersonation,Parking/Drop Lot/Garage,1
+67,47,Theft From Building,Air/Bus/Train Terminal,4
+68,47,Theft From Building,Commercial/Office Building,2
+69,47,Theft From Building,Government/Public Building,3
+70,47,Theft From Building,Other/Unknown,1
+71,47,Theft From Building,Parking/Drop Lot/Garage,1
+72,49,Burglary/Breaking & Entering,Air/Bus/Train Terminal,1
+73,50,Theft From Coin-Operated Machine or Device,Commercial/Office Building,2
+74,51,Simple Assault,Air/Bus/Train Terminal,500
+75,51,Simple Assault,Commercial/Office Building,3
+76,51,Simple Assault,Government/Public Building,1
+77,51,Simple Assault,Highway/Road/Alley/Street/Sidewalk,156
+78,51,Simple Assault,Other/Unknown,1
+79,51,Simple Assault,Parking/Drop Lot/Garage,14
+80,56,Fondling,Air/Bus/Train Terminal,44
+81,56,Fondling,Highway/Road/Alley/Street/Sidewalk,11
+82,62,Animal Cruelty,Highway/Road/Alley/Street/Sidewalk,1

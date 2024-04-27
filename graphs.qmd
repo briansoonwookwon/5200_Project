@@ -8,100 +8,62 @@ format:
     self-contained: true
 ---
 
-```{python}
-import plotly.graph_objects as go
-import pandas as pd
+```{=html}
+<!-- Plotly.js Library -->
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<div id="plot"></div>
 
+<script>
+    // Example data for offenses
+    var offenses = ['False Pretenses/Swindle/Confidence Game', 'Sexual Assault With An Object',
+                    'Destruction/Damage/Vandalism of Property', 'Simple Assault', 'Fondling', 'Animal Cruelty'];
+    var counts = [5, 1, 430, 676, 55, 2];
 
-df = pd.read_csv('data/Dheeraj_data/national_arrests.csv')
+    // Example data for locations (specific to the first offense for simplicity)
+    var locations = ['Air/Bus/Train Terminal', 'Parking/Drop Lot/Garage'];
+    var locationCounts = [3, 14];
 
+    // Create the first plot with total offenses by name
+    var trace1 = {
+        x: offenses,
+        y: counts,
+        type: 'bar',
+        name: 'Total Offenses by Name'
+    };
 
-traces = []
-for offense in df.columns[1:]:  
-    traces.append(go.Scatter(
-        x=df['data_year'],
-        y=df[offense],
-        mode='lines',
-        name=offense
-    ))
+    // Create the second plot, initially empty
+    var trace2 = {
+        x: [],
+        y: [],
+        type: 'bar',
+        name: 'Offense Count by Location',
+        xaxis: 'x2',
+        yaxis: 'y2'
+    };
 
-fig = go.Figure(traces)
+    var data = [trace1, trace2];
+    var layout = {
+        title: 'Interactive Offense Data Visualization',
+        grid: {rows: 1, columns: 2, subplots: [['xy', 'x2y2']]},
+        showlegend: false
+    };
 
+    Plotly.newPlot('offense-plot', data, layout);
 
-fig.update_layout(
-    title='All Arrest by Offense Year-Over-Year',
-    xaxis_title='Year',
-    yaxis_title='Number of Arrests',
-    hovermode='x unified'  
-)
+    // Set up interaction: click event on the first plot updates the second plot
+    document.getElementById('offense-plot').on('plotly_click', function(data){
+        var pts = data.points;
+        if (pts.length > 0 && pts[0].fullData.name === 'Total Offenses by Name') {
+            // Assuming the index of the bar clicked corresponds to the data arrays
+            var offenseIndex = pts[0].pointIndex;
 
-
-fig.show()
-
-
-```
-
-
-```{python}
-import plotly.graph_objects as go
-import pandas as pd
-
-
-df = pd.read_csv('data/Dheeraj_data/national_arrests.csv')
-# Create traces for each offense
-traces = []
-for offense in df.columns[1:]:  
-    traces.append(go.Scatter(
-        x=df['data_year'],
-        y=df[offense],
-        mode='lines+markers',  
-        line=dict(width=2),  
-        marker=dict(size=4),  
-        text=offense,  
-        hoverinfo='y+text'  
-    ))
-
-
-fig = go.Figure(traces)
-
-
-fig.update_layout(
-    title='All Arrest by Offense Year-Over-Year',
-    xaxis_title='Year',
-    yaxis_title='Number of Arrests',
-    hovermode='closest',  
-    legend=dict( 
-        title=dict(text='Offenses'),
-        orientation='h',  
-        yanchor='bottom',
-        y=1.02,  
-        xanchor='right',
-        x=1
-    ),
-    width=800, 
-    height=600  
-)
-
-fig.add_vline(x=2020, line_width=2, line_dash="dash", line_color="red")
-
-
-fig.add_annotation(
-    x=2020, y=max(df.max()),  
-    text="Start of COVID-19 impact",
-    showarrow=True,
-    arrowhead=1,
-    ax=-50,
-    ay=0
-)
-
-
-fig.update_traces(
-    hoverlabel=dict(namelength=-1) 
-)
-
-# Show the plot
-fig.show()
-
-
-
-```
+            // Update the second plot with related data (simplified to use static location data)
+            if (offenseIndex === 0) {  // Updating when the first offense is clicked
+                Plotly.restyle('offense-plot', {
+                    'x': [locations],
+                    'y': [locationCounts]
+                }, [1]);  // Target the second trace for updating
+            }
+        }
+    });
+</script>
