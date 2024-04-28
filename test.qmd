@@ -1,76 +1,7 @@
 ---
-title: "Interactive Data Visualization with Plotly.js"
+title: "2018 Graph Final, Have to add 2022 and others asap"
 format: html
 ---
-
-```{=html}
-<!-- Divs for Plotly plots -->
-<div id="plot1"></div>
-<div id="plot2"></div>
-<!-- Link to Plotly.js library -->
-<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const offenses = [
-        'False Pretenses/Swindle/Confidence Game', 'Sexual Assault With An Object',
-        'Destruction/Damage/Vandalism of Property', 'Simple Assault', 'Fondling', 'Animal Cruelty'
-    ];
-    const counts = [5, 1, 430, 676, 55, 2];
-
-    // Data for the first plot
-    const trace1 = {
-        x: offenses,
-        y: counts,
-        type: 'bar',
-        name: 'Total Offenses'
-    };
-
-    const layout1 = {
-        title: 'Click an Offense to View Locations',
-        barmode: 'group'
-    };
-
-    Plotly.newPlot('plot1', [trace1], layout1);
-
-    // Initialize an empty second plot
-    const trace2 = {
-        x: [],
-        y: [],
-        type: 'bar',
-        name: 'Offense Details'
-    };
-
-    const layout2 = {
-        title: 'Details of Selected Offense'
-    };
-
-    Plotly.newPlot('plot2', [trace2], layout2);
-
-    // Click event to update second plot
-    document.getElementById('plot1').on('plotly_click', function(data){
-        const pt = data.points[0];
-        const offenseIndex = pt.pointIndex;
-
-        // Sample details (could be fetched dynamically or based on data)
-        const locationDetails = [
-            ['Air/Bus/Train Terminal', 'Parking/Drop Lot/Garage'],
-            ['Highway/Road/Alley/Street/Sidewalk', 'Other/Unknown'],
-            ['Commercial/Office Building', 'Residential Home'],
-            ['Government/Public Building', 'School/College'],
-            ['Park/Playground', 'Retail Store'],
-            ['Restaurant/Bar', 'Hotel/Motel']
-        ][offenseIndex];
-
-        const locationCounts = [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)];
-
-        Plotly.restyle('plot2', {
-            'x': [locationDetails],
-            'y': [locationCounts]
-        });
-    });
-});
-</script>
-```
 
 ```{=html}
 <!-- Divs for Plotly plots -->
@@ -87,7 +18,6 @@ document.addEventListener('DOMContentLoaded', function() {
     ];
 
 
-   // Prepare data for plotting
     let offenseData = dataFromPython.reduce((acc, curr) => {
         let offense = acc[curr.OFFENSE_NAME] || {total: 0, details: []};
         offense.total += curr.OFFENSE_COUNT;
@@ -96,7 +26,6 @@ document.addEventListener('DOMContentLoaded', function() {
         return acc;
     }, {});
 
-    // Sort main offense data for the first plot
     let sortedOffenses = Object.entries(offenseData)
         .sort((a, b) => b[1].total - a[1].total)
         .map(item => item[0]);
@@ -117,7 +46,6 @@ document.addEventListener('DOMContentLoaded', function() {
         xaxis: {tickangle: -45}
     });
 
-    // Prepare initial data for the second plot (total counts by location)
     let locationData = dataFromPython.reduce((acc, curr) => {
         acc[curr.LOCATION_NAME] = (acc[curr.LOCATION_NAME] || 0) + curr.OFFENSE_COUNT;
         return acc;
@@ -131,7 +59,6 @@ document.addEventListener('DOMContentLoaded', function() {
         .sort((a, b) => b[1] - a[1])
         .map(item => item[1]);
 
-    // Initialize the second plot with location data sorted by counts
     Plotly.newPlot('plot2', [{
         x: sortedLocations,
         y: sortedLocationCounts,
@@ -141,19 +68,16 @@ document.addEventListener('DOMContentLoaded', function() {
         title: 'Initial Overview: Count of Crimes by Location'
     });
 
-    // Set up interaction for the first plot
     document.getElementById('plot1').on('plotly_click', function(data) {
         if (data.points.length > 0) {
             const selectedOffense = data.points[0].x;
             let details = offenseData[selectedOffense].details;
 
-            // Sort details by count before displaying
             details.sort((a, b) => b.count - a.count);
 
             let locations = details.map(item => item.location);
             let locationCounts = details.map(item => item.count);
 
-            // Update plot2 with sorted details and update the title dynamically
             Plotly.restyle('plot2', {
                 x: [locations],
                 y: [locationCounts]
