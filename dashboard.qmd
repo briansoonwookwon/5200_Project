@@ -1,0 +1,61 @@
+---
+title: "Washington DC Crime Dashboard"
+format: 
+    dashboard:
+        embed-resources: true
+
+---
+
+# Visualizations
+
+## Row
+
+```{r}
+#| code-fold: true
+#| file: ./sankey_22.r
+```
+
+```{r}
+#| code-fold: true
+#| file: ./sankey_20.r
+```
+
+## Row
+
+```{r}
+#| code-fold: true
+#| file: ./map.r
+```
+
+# Data Tables
+
+## Row
+
+```{r}
+#| code-fold: true
+#| file: ./offense_type_dt.r
+```
+
+```{r}
+#| code-fold: true
+#| file: ./location_dt.r
+```
+
+## Row
+
+```{r}
+#| code-fold: true
+#| file: ./weapon_dt.r
+```
+
+```{r}
+#| code-fold: true
+#| file: ./injury_dt.r
+```
+
+# Test tables
+
+```{r}
+#| code-fold: true
+#| file: ./test2.r
+```

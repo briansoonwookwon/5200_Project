@@ -1,5 +1,7 @@
 library(tidyverse)
 library(networkD3)
+library(htmlwidgets)
+library(htmltools)
 
 # Read all necessary files
 offense_22 = read.csv("./data/DC-2022/NIBRS_OFFENSE.csv") 
@@ -70,7 +72,7 @@ links.df$source_id = match(links.df$source, nodes.df$name) - 1
 links.df$target_id = match(links.df$target, nodes.df$name) - 1 
 
 # Create a sankey diagram
-sankeyNetwork(Links = links.df,     
+net = sankeyNetwork(Links = links.df,     
               Nodes = nodes.df,     
               Source = 'source_id', 
               Target = 'target_id', 
@@ -78,3 +80,7 @@ sankeyNetwork(Links = links.df,
               NodeID = 'label',      
               fontSize = 16,        
               iterations = 0)
+
+# Add a title
+net_with_title = prependContent(net, tags$b(HTML('Injuries and weapon type by offense type in 2022')))
+net_with_title
