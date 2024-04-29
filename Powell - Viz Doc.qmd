@@ -91,6 +91,13 @@ rownames(table_data) <- NULL
 
 ```
 
+```{r}
+
+table_data3 = offense_data_total %>% group_by(year) %>% tally() %>%
+  spread(year,n)
+```
+
+
 4. Arrange data
 
 ```{r}
@@ -230,7 +237,6 @@ p <- ggnet2(net,
 
 ggplotly(p)
 
-
 ```
 
 
@@ -302,17 +308,21 @@ victim_data_2022 <- right_join(victim_data_2022,relation_2022, by = "victim_id")
 total_data_2022 <- left_join(victim_data_2022,offense_data_2022, by = c("incident_id","year"))
 total_data_2022 <- total_data_2022 %>% select(c(relationship_name,offense_category_name, year))
 
+## adjusting colnames for difference
 colnames(total_data_2021) <- c("RELATIONSHIP_NAME","OFFENSE_CATEGORY_NAME", "year")
 colnames(total_data_2022) <- c("RELATIONSHIP_NAME","OFFENSE_CATEGORY_NAME", "year")
 
+## groups
 total_data_relation <- rbind(total_data_2018, total_data_2019, total_data_2020, total_data_2021, total_data_2022)
 
+## relationships store for next chunk
 relationships <- total_data_relation$RELATIONSHIP_NAME %>% factor() %>% levels()
 
 ```
 
 ```{r}
 
+## Splitting the relationships type into indicies and then filtering by them
 family_relationships_index <- c(6,14,15,16,19,21,22)
 partner_relationships_index <- c(1,5,7,8,11,12,23,24,25,26)
 acquaintance_relationships_index <- c(3,4,9,10,13,17,18,20)
@@ -325,6 +335,7 @@ acquaintance_relationships <- relationships[acquaintance_relationships_index]
 stranger_relationships <- relationships[stranger_relationships_index]
 other_relationships <- relationships[other_relationships_index]
 
+## Function for new column of values
 relation_checker <- function(value){
   if(value %in% family_relationships){
     val <- "Family"
@@ -339,10 +350,11 @@ relation_checker <- function(value){
   }
 }
 
+## vectorizing the function and adding the colum
 relation_checker <- Vectorize(relation_checker)
 
 total_data_relation <- total_data_relation %>% mutate(Relation_group = relation_checker(RELATIONSHIP_NAME)) %>% filter(Relation_group != "Other")
-total_data_relation$Relation_group %>% table()
+#total_data_relation$Relation_group %>% table()
 
 
 ```
@@ -355,78 +367,34 @@ library(viridis)
 library(plotly)
 library(heatmaply)
 
+## Making matrix for Viz
 mat <- total_data_relation %>% group_by(Relation_group,OFFENSE_CATEGORY_NAME) %>% tally() %>%
   spread(Relation_group,n) %>% as.data.frame()
 mat[is.na(mat)] <- 0
 rownames(mat) <- mat$OFFENSE_CATEGORY_NAME
 mat <- mat %>% select(-OFFENSE_CATEGORY_NAME)
-#norm_step_1 <- c(mat$Acquaintance,mat$Family,mat$`Partner/Partners Family`,mat$Stranger)
-#mean_step_2 <- mean(norm_step_1)
-#sd_step_2 <- sd(norm_step_1)
-#mat$Acquaintance <- (mat$Acquaintance - mean_step_2)/sd_step_2
-#mat$Family <- (mat$Family - mean_step_2)/sd_step_2
-#mat$`Partner/Partners Family` <- (mat$`Partner/Partners Family` - mean_step_2)/sd_step_2
-#mat$Stranger <- (mat$Stranger - mean_step_2)/sd_step_2
 
 #p1 <- heatmap(mat)
 
-p2 <- heatmaply(mat,
-             label_names = c("Crime Group", "Relation", "Amount Offense"),
-             #width  = 900, height = 800,
-             #dendrogram = FALSE,
-             limits = c(-1,1),
+## Heatmap code
+ptotal <- heatmaply(mat,
+             label_names = c("Crime Group", "Relation", "Relation Prevelance"),
+             width  = 800, height = 800,
+             dendrogram = FALSE,
+             limits = c(0,10000),
+             scale = "row",
+             branches_lwd = 0.1,
              hide_colorbar = TRUE,
              grid_color = "white",
              grid_width = 0.00001,
              dend_hoverinfo = FALSE
              )
 
-p2
-
-```
+ptotal
 
 
 
-```{r}
-# Load data 
-data <- read.table("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/multivariate.csv", header=T, sep=";")
-colnames(data) <- gsub("\\.", " ", colnames(data))
 
-# Select a few country
-data <- data %>% 
-  filter(Country %in% c("France", "Sweden", "Italy", "Spain", "England", "Portugal", "Greece", "Peru", "Chile", "Brazil", "Argentina", "Bolivia", "Venezuela", "Australia", "New Zealand", "Fiji", "China", "India", "Thailand", "Afghanistan", "Bangladesh", "United States of America", "Canada", "Burundi", "Angola", "Kenya", "Togo")) %>%
-  arrange(Country) %>%
-  mutate(Country = factor(Country, Country))
-
-# Matrix format
-mat <- data
-rownames(mat) <- mat[,1]
-mat <- mat %>% dplyr::select(-Country, -Group, -Continent)
-mat <- as.matrix(mat)
-```
-
-
-```{r}
-# Heatmap
-#d3heatmap(mat, scale="column", dendrogram = "none", width="800px", height="80Opx", colors = "Blues")
-
-library(heatmaply)
-p <- heatmaply(mat, 
-        xlab = "", ylab = "", 
-        main = "",
-        scale = "column",
-        margins = c(60,100,40,20),
-        grid_color = "white",
-        grid_width = 0.00001,
-        titleX = FALSE,
-        hide_colorbar = TRUE,
-        branches_lwd = 0.1,
-        label_names = c("Country", "Feature:", "Value"),
-        fontsize_row = 5, fontsize_col = 5,
-        labCol = colnames(mat),
-        labRow = rownames(mat),
-        heatmap_layers = theme(axis.line=element_blank())
-        )
 ```
 
 
