@@ -119,25 +119,83 @@ ul.task-list li input[type="checkbox"] {
 //     });
 // }
 
+// function initializePlots() {
+//     let layout1 = {
+//         title: 'Total Offenses by Type', // Specific title for the first plot
+//         margin: {l: 350, r: 50, t: 50, b: 50}, // Increased margin to fit long labels
+//         paper_bgcolor: 'rgba(255,255,255,1)', // Pure white background for the plot area
+//         plot_bgcolor: 'rgba(247, 247, 247, 1)', // Light gray for the plotting area to differentiate from the background
+//         font: {
+//             family: 'Helvetica Neue, Helvetica, Arial, sans-serif', // A clean, modern font
+//             size: 14, // Slightly larger font size for readability
+//             color: '#333333' // Dark grey color for better readability
+//         },
+//         xaxis: {
+//             tickfont: {
+//                 size: 12 // Smaller font for axis ticks to ensure they do not overlap
+//             }
+//         },
+//         yaxis: {
+//             tickfont: {
+//                 size: 14 // Ensure axis labels are legible
+//             }
+//         }
+//     };
+
+//     Plotly.newPlot('plot1', [{
+//         y: [],
+//         x: [],
+//         type: 'bar',
+//         orientation: 'h', // Horizontal bar chart
+//         marker: {
+//             color: '#17BECF', // A soft teal color
+//             line: {
+//                 color: '#168FA8', // A darker teal for border
+//                 width: 1.5 // Thicker border
+//             }
+//         },
+//         name: 'Total Offenses'
+//     }], layout1);
+
+//     let layout2 = Object.assign({}, layout1, {title: 'Details for Selected Offense'}); // Clone layout1 and update the title
+
+//     Plotly.newPlot('plot2', [{
+//         y: [],
+//         x: [],
+//         type: 'bar',
+//         orientation: 'h', // Horizontal bar chart
+//         marker: {
+//             color: '#FF7F0E', // A vibrant orange
+//             line: {
+//                 color: '#D65F0A', // A darker shade of orange
+//                 width: 1.5 // Thicker border
+//             }
+//         },
+//         name: 'Offense Locations'
+//     }], layout2);
+// }
+
+
+
 function initializePlots() {
-    let layout1 = {
-        title: 'Total Offenses by Type', // Specific title for the first plot
-        margin: {l: 350, r: 50, t: 50, b: 50}, // Increased margin to fit long labels
-        paper_bgcolor: 'rgba(255,255,255,1)', // Pure white background for the plot area
-        plot_bgcolor: 'rgba(247, 247, 247, 1)', // Light gray for the plotting area to differentiate from the background
+    let layout = {
+        title: 'Click an Offense to View Locations',
+        margin: {l: 300, r: 50, t: 50, b: 50}, // Adjust margins to ensure full visibility
+        paper_bgcolor: '#f1f1f1', // A soft gray background that complements the vibrant and deep colors
+        plot_bgcolor: '#fafafa', // A slightly lighter shade for the plotting area to add depth
         font: {
-            family: 'Helvetica Neue, Helvetica, Arial, sans-serif', // A clean, modern font
-            size: 14, // Slightly larger font size for readability
-            color: '#333333' // Dark grey color for better readability
+            family: 'Helvetica Neue, Helvetica, Arial, sans-serif',
+            size: 14,
+            color: '#333333'
         },
         xaxis: {
             tickfont: {
-                size: 12 // Smaller font for axis ticks to ensure they do not overlap
+                size: 12
             }
         },
         yaxis: {
             tickfont: {
-                size: 14 // Ensure axis labels are legible
+                size: 14
             }
         }
     };
@@ -146,33 +204,32 @@ function initializePlots() {
         y: [],
         x: [],
         type: 'bar',
-        orientation: 'h', // Horizontal bar chart
+        orientation: 'h',
         marker: {
-            color: '#17BECF', // A soft teal color
+            color: '#E63946', // Vibrant red for the first plot
             line: {
-                color: '#168FA8', // A darker teal for border
-                width: 1.5 // Thicker border
+                color: '#C53034', // A slightly darker red for border
+                width: 1.5
             }
         },
         name: 'Total Offenses'
-    }], layout1);
+    }], layout);
 
-    let layout2 = Object.assign({}, layout1, {title: 'Details for Selected Offense'}); // Clone layout1 and update the title
-
+    layout.title = 'Details for Selected Offense';
     Plotly.newPlot('plot2', [{
         y: [],
         x: [],
         type: 'bar',
-        orientation: 'h', // Horizontal bar chart
+        orientation: 'h',
         marker: {
-            color: '#FF7F0E', // A vibrant orange
+            color: '#1D3557', // Deep navy blue for the second plot
             line: {
-                color: '#D65F0A', // A darker shade of orange
-                width: 1.5 // Thicker border
+                color: '#162A40', // An even deeper blue for border
+                width: 1.5
             }
         },
         name: 'Offense Locations'
-    }], layout2);
+    }], layout);
 }
 
 function processDataAndPlot(dataFromPython) {
