@@ -62,8 +62,8 @@ format: html
 // }
 
 function initializePlots() {
-    let layout = {
-        title: 'Click an Offense to View Locations',
+    let layout1 = {
+        title: 'Total Offenses by Type', // Specific title for the first plot
         margin: {l: 350, r: 50, t: 50, b: 50}, // Increased margin to fit long labels
         paper_bgcolor: 'rgba(255,255,255,1)', // Pure white background for the plot area
         plot_bgcolor: 'rgba(247, 247, 247, 1)', // Light gray for the plotting area to differentiate from the background
@@ -90,30 +90,31 @@ function initializePlots() {
         type: 'bar',
         orientation: 'h', // Horizontal bar chart
         marker: {
-            color: '#17BECF', // A soft teal color for a soothing aesthetic
+            color: '#17BECF', // A soft teal color
             line: {
-                color: '#168FA8', // A darker teal for border, adding depth
-                width: 1.5 // Thicker border for clear separation
+                color: '#168FA8', // A darker teal for border
+                width: 1.5 // Thicker border
             }
         },
         name: 'Total Offenses'
-    }], layout);
+    }], layout1);
 
-    layout.title = 'Details for Selected Offense'; // Adjust title for the second plot
+    let layout2 = Object.assign({}, layout1, {title: 'Details for Selected Offense'}); // Clone layout1 and update the title
+
     Plotly.newPlot('plot2', [{
         y: [],
         x: [],
         type: 'bar',
         orientation: 'h', // Horizontal bar chart
         marker: {
-            color: '#FF7F0E', // A vibrant orange for contrast with the teal
+            color: '#FF7F0E', // A vibrant orange
             line: {
-                color: '#D65F0A', // A darker shade of orange for the border
-                width: 1.5 // Thicker border for clear separation
+                color: '#D65F0A', // A darker shade of orange
+                width: 1.5 // Thicker border
             }
         },
         name: 'Offense Locations'
-    }], layout);
+    }], layout2);
 }
 
 function processDataAndPlot(dataFromPython) {
@@ -125,7 +126,6 @@ function processDataAndPlot(dataFromPython) {
         return acc;
     }, {});
 
-    // Ensuring the data is sorted in descending order for both plots
     let sortedOffenses = Object.entries(offenseData)
         .sort((a, b) => b[1].total - a[1].total)
         .slice(0, 10)  // Take only the top 10 offenses
@@ -152,7 +152,7 @@ function processDataAndPlot(dataFromPython) {
 
                 Plotly.restyle('plot2', {y: [locations.reverse()], x: [locationCounts.reverse()]});
                 Plotly.relayout('plot2', {
-                    title: `Locations for Offense: ${selectedOffense}`
+                    title: `Locations for Offense: ${selectedOffense}` // Update title dynamically
                 });
             }
         }
