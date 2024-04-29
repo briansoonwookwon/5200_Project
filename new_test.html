@@ -82,27 +82,32 @@ ul.task-list li input[type="checkbox"] {
     processDataAndPlot(data2022); // Load initial dataset
 });
 
+
 function initializePlots() {
     Plotly.newPlot('plot1', [{
-        x: [],
         y: [],
+        x: [],
         type: 'bar',
+        orientation: 'h',  // Horizontal bar chart
         marker: {color: 'blue'},
         name: 'Total Offenses'
     }], {
+        automargin: true,
         title: 'Click an Offense to View Locations',
-        barmode: 'group',
-        xaxis: {tickangle: -45}
+        margin: {l: 350, r: 50, t: 50, b: 50}  // Increase left margin to ensure labels fit
     });
 
     Plotly.newPlot('plot2', [{
-        x: [],
         y: [],
+        x: [],
         type: 'bar',
+        orientation: 'h',  // Horizontal bar chart
         marker: {color: 'green'},
         name: 'Offense Locations'
     }], {
-        title: 'Locations for Selected Offense'
+        title: 'Details for Selected Offense',
+        automargin: true,
+        margin: {l: 350, r: 50, t: 50, b: 50}  // Same increased margin for consistency
     });
 }
 
@@ -115,25 +120,32 @@ function processDataAndPlot(dataFromPython) {
         return acc;
     }, {});
 
-    let sortedOffenses = Object.entries(offenseData).sort((a, b) => b[1].total - a[1].total).map(item => item[0]);
-    let sortedCounts = Object.entries(offenseData).sort((a, b) => b[1].total - a[1].total).map(item => item[1].total);
+    // Ensuring the data is sorted in descending order for both plots
+    let sortedOffenses = Object.entries(offenseData)
+        .sort((a, b) => b[1].total - a[1].total)
+        .slice(0, 10)  // Take only the top 10 offenses
+        .map(item => item[0]);
 
-    Plotly.restyle('plot1', {x: [sortedOffenses], y: [sortedCounts]});
-    Plotly.restyle('plot2', {x: [[]], y: [[]]}); // Clear plot2 when switching datasets
-    Plotly.relayout('plot2', {title: 'Locations for Selected Offense'});
+    let sortedCounts = Object.entries(offenseData)
+        .sort((a, b) => b[1].total - a[1].total)
+        .slice(0, 10)  // Corresponding counts for the top 10
+        .map(item => item[1].total);
+
+    Plotly.restyle('plot1', {y: [sortedOffenses.reverse()], x: [sortedCounts.reverse()]});
+    Plotly.restyle('plot2', {y: [[]], x: [[]]}); // Clear plot2 when switching datasets
 
     document.getElementById('plot1').on('plotly_click', function(data) {
         if (data.points.length > 0) {
-            const selectedOffense = data.points[0].x;
+            const selectedOffense = data.points[0].y;
             let details = offenseData[selectedOffense].details;
 
             if (details) {
                 details.sort((a, b) => b.count - a.count);
 
-                let locations = details.map(item => item.location);
-                let locationCounts = details.map(item => item.count);
+                let locations = details.slice(0, 10).map(item => item.location); // Top 10 locations for the selected offense
+                let locationCounts = details.slice(0, 10).map(item => item.count);
 
-                Plotly.restyle('plot2', {x: [locations], y: [locationCounts]});
+                Plotly.restyle('plot2', {y: [locations.reverse()], x: [locationCounts.reverse()]});
                 Plotly.relayout('plot2', {
                     title: `Locations for Offense: ${selectedOffense}`
                 });
@@ -141,6 +153,7 @@ function processDataAndPlot(dataFromPython) {
         }
     });
 }
+
 
 function attachButtonHandlers() {
     document.getElementById('dataset2022Button').addEventListener('click', () => {
