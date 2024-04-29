@@ -232,10 +232,14 @@ p <- ggnet2(net,
             node.color = "Crime",
             edge.size = 1,
             edge.color = "grey",
-            edge.alpha = .5) +
-  theme(legend.position = "none")
+            #edge.size = "Weight",
+            edge.alpha = .1,
+            label = TRUE) +
+  theme(legend.position = "none") + labs(title = "Relationship between Offenses Within Incidents")
 
 ggplotly(p)
+
+#?ggnet2
 
 ```
 
@@ -387,12 +391,14 @@ ptotal <- heatmaply(mat,
              hide_colorbar = TRUE,
              grid_color = "white",
              grid_width = 0.00001,
-             dend_hoverinfo = FALSE
-             )
+             dend_hoverinfo = FALSE,
+             main = "LETS GOO"
+             ) %>%
+        layout(title = 'check this out')
 
 ptotal
 
-
+?heatmaply
 
 
 ```
