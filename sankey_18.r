@@ -1,5 +1,7 @@
 library(tidyverse)
 library(networkD3)
+library(htmlwidgets)
+library(htmltools)
 
 # Read all necessary files
 offense_18 = read.csv("./data/DC-2018/NIBRS_OFFENSE.csv") 

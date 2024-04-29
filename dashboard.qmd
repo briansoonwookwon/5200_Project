@@ -3,7 +3,6 @@ title: "Washington DC Crime Dashboard"
 format: 
     dashboard:
         embed-resources: true
-
 ---
 
 # Visualizations
@@ -18,6 +17,11 @@ format:
 ```{r}
 #| code-fold: true
 #| file: ./sankey_20.r
+```
+
+```{r}
+#| code-fold: true
+#| file: ./sankey_18.r
 ```
 
 ## Row
@@ -59,3 +63,92 @@ format:
 #| code-fold: true
 #| file: ./test2.r
 ```
+
+# Dheeraj
+
+```{=html}
+<!-- Divs for Plotly plots -->
+<div id="plot1"></div>
+<div id="plot2"></div>
+<!-- Link to Plotly.js library -->
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Offense data as JSON array from Python output 2020 data
+    const dataFromPython  = [
+        {"OFFENSE_TYPE_ID":2,"OFFENSE_NAME":"False Pretenses\/Swindle\/Confidence Game","LOCATION_NAME":"Air\/Bus\/Train Terminal","OFFENSE_COUNT":3},{"OFFENSE_TYPE_ID":2,"OFFENSE_NAME":"False Pretenses\/Swindle\/Confidence Game","LOCATION_NAME":"Parking\/Drop Lot\/Garage","OFFENSE_COUNT":1},{"OFFENSE_TYPE_ID":4,"OFFENSE_NAME":"Sexual Assault With An Object","LOCATION_NAME":"Highway\/Road\/Alley\/Street\/Sidewalk","OFFENSE_COUNT":1},{"OFFENSE_TYPE_ID":5,"OFFENSE_NAME":"Destruction\/Damage\/Vandalism of Property","LOCATION_NAME":"Air\/Bus\/Train Terminal","OFFENSE_COUNT":139},{"OFFENSE_TYPE_ID":5,"OFFENSE_NAME":"Destruction\/Damage\/Vandalism of Property","LOCATION_NAME":"Commercial\/Office Building","OFFENSE_COUNT":2},{"OFFENSE_TYPE_ID":5,"OFFENSE_NAME":"Destruction\/Damage\/Vandalism of Property","LOCATION_NAME":"Highway\/Road\/Alley\/Street\/Sidewalk","OFFENSE_COUNT":176},{"OFFENSE_TYPE_ID":5,"OFFENSE_NAME":"Destruction\/Damage\/Vandalism of Property","LOCATION_NAME":"Other\/Unknown","OFFENSE_COUNT":33},{"OFFENSE_TYPE_ID":5,"OFFENSE_NAME":"Destruction\/Damage\/Vandalism of Property","LOCATION_NAME":"Parking\/Drop Lot\/Garage","OFFENSE_COUNT":78},{"OFFENSE_TYPE_ID":7,"OFFENSE_NAME":"Theft of Motor Vehicle Parts or Accessories","LOCATION_NAME":"Air\/Bus\/Train Terminal","OFFENSE_COUNT":1},{"OFFENSE_TYPE_ID":7,"OFFENSE_NAME":"Theft of Motor Vehicle Parts or Accessories","LOCATION_NAME":"Highway\/Road\/Alley\/Street\/Sidewalk","OFFENSE_COUNT":1},{"OFFENSE_TYPE_ID":7,"OFFENSE_NAME":"Theft of Motor Vehicle Parts or Accessories","LOCATION_NAME":"Parking\/Drop Lot\/Garage","OFFENSE_COUNT":24},{"OFFENSE_TYPE_ID":11,"OFFENSE_NAME":"Counterfeiting\/Forgery","LOCATION_NAME":"Air\/Bus\/Train Terminal","OFFENSE_COUNT":1},{"OFFENSE_TYPE_ID":11,"OFFENSE_NAME":"Counterfeiting\/Forgery","LOCATION_NAME":"Other\/Unknown","OFFENSE_COUNT":1},{"OFFENSE_TYPE_ID":11,"OFFENSE_NAME":"Counterfeiting\/Forgery","LOCATION_NAME":"Parking\/Drop Lot\/Garage","OFFENSE_COUNT":2},{"OFFENSE_TYPE_ID":13,"OFFENSE_NAME":"Pocket-picking","LOCATION_NAME":"Air\/Bus\/Train Terminal","OFFENSE_COUNT":12},{"OFFENSE_TYPE_ID":13,"OFFENSE_NAME":"Pocket-picking","LOCATION_NAME":"Highway\/Road\/Alley\/Street\/Sidewalk","OFFENSE_COUNT":2},{"OFFENSE_TYPE_ID":14,"OFFENSE_NAME":"Theft From Motor Vehicle","LOCATION_NAME":"Air\/Bus\/Train Terminal","OFFENSE_COUNT":2},{"OFFENSE_TYPE_ID":14,"OFFENSE_NAME":"Theft From Motor Vehicle","LOCATION_NAME":"Commercial\/Office Building","OFFENSE_COUNT":1},{"OFFENSE_TYPE_ID":14,"OFFENSE_NAME":"Theft From Motor Vehicle","LOCATION_NAME":"Highway\/Road\/Alley\/Street\/Sidewalk","OFFENSE_COUNT":1},{"OFFENSE_TYPE_ID":14,"OFFENSE_NAME":"Theft From Motor Vehicle","LOCATION_NAME":"Other\/Unknown","OFFENSE_COUNT":1},{"OFFENSE_TYPE_ID":14,"OFFENSE_NAME":"Theft From Motor Vehicle","LOCATION_NAME":"Parking\/Drop Lot\/Garage","OFFENSE_COUNT":40},{"OFFENSE_TYPE_ID":16,"OFFENSE_NAME":"Drug\/Narcotic Violations","LOCATION_NAME":"Air\/Bus\/Train Terminal","OFFENSE_COUNT":217},{"OFFENSE_TYPE_ID":16,"OFFENSE_NAME":"Drug\/Narcotic Violations","LOCATION_NAME":"Highway\/Road\/Alley\/Street\/Sidewalk","OFFENSE_COUNT":66},{"OFFENSE_TYPE_ID":16,"OFFENSE_NAME":"Drug\/Narcotic Violations","LOCATION_NAME":"Other\/Unknown","OFFENSE_COUNT":1},{"OFFENSE_TYPE_ID":16,"OFFENSE_NAME":"Drug\/Narcotic Violations","LOCATION_NAME":"Parking\/Drop Lot\/Garage","OFFENSE_COUNT":21},{"OFFENSE_TYPE_ID":18,"OFFENSE_NAME":"Purse-snatching","LOCATION_NAME":"Air\/Bus\/Train Terminal","OFFENSE_COUNT":97},{"OFFENSE_TYPE_ID":18,"OFFENSE_NAME":"Purse-snatching","LOCATION_NAME":"Highway\/Road\/Alley\/Street\/Sidewalk","OFFENSE_COUNT":20},{"OFFENSE_TYPE_ID":18,"OFFENSE_NAME":"Purse-snatching","LOCATION_NAME":"Parking\/Drop Lot\/Garage","OFFENSE_COUNT":1},{"OFFENSE_TYPE_ID":20,"OFFENSE_NAME":"Arson","LOCATION_NAME":"Air\/Bus\/Train Terminal","OFFENSE_COUNT":2},{"OFFENSE_TYPE_ID":21,"OFFENSE_NAME":"Motor Vehicle Theft","LOCATION_NAME":"Air\/Bus\/Train Terminal","OFFENSE_COUNT":4},{"OFFENSE_TYPE_ID":21,"OFFENSE_NAME":"Motor Vehicle Theft","LOCATION_NAME":"Highway\/Road\/Alley\/Street\/Sidewalk","OFFENSE_COUNT":2},{"OFFENSE_TYPE_ID":21,"OFFENSE_NAME":"Motor Vehicle Theft","LOCATION_NAME":"Parking\/Drop Lot\/Garage","OFFENSE_COUNT":23},{"OFFENSE_TYPE_ID":27,"OFFENSE_NAME":"Aggravated Assault","LOCATION_NAME":"Air\/Bus\/Train Terminal","OFFENSE_COUNT":83},{"OFFENSE_TYPE_ID":27,"OFFENSE_NAME":"Aggravated Assault","LOCATION_NAME":"Highway\/Road\/Alley\/Street\/Sidewalk","OFFENSE_COUNT":30},{"OFFENSE_TYPE_ID":27,"OFFENSE_NAME":"Aggravated Assault","LOCATION_NAME":"Parking\/Drop Lot\/Garage","OFFENSE_COUNT":7},{"OFFENSE_TYPE_ID":28,"OFFENSE_NAME":"Stolen Property Offenses","LOCATION_NAME":"Air\/Bus\/Train Terminal","OFFENSE_COUNT":14},{"OFFENSE_TYPE_ID":28,"OFFENSE_NAME":"Stolen Property Offenses","LOCATION_NAME":"Grocery\/Supermarket","OFFENSE_COUNT":1},{"OFFENSE_TYPE_ID":29,"OFFENSE_NAME":"Kidnapping\/Abduction","LOCATION_NAME":"Air\/Bus\/Train Terminal","OFFENSE_COUNT":2},{"OFFENSE_TYPE_ID":29,"OFFENSE_NAME":"Kidnapping\/Abduction","LOCATION_NAME":"Highway\/Road\/Alley\/Street\/Sidewalk","OFFENSE_COUNT":1},{"OFFENSE_TYPE_ID":32,"OFFENSE_NAME":"Murder and Nonnegligent Manslaughter","LOCATION_NAME":"Air\/Bus\/Train Terminal","OFFENSE_COUNT":3},{"OFFENSE_TYPE_ID":35,"OFFENSE_NAME":"Drug Equipment Violations","LOCATION_NAME":"Air\/Bus\/Train Terminal","OFFENSE_COUNT":21},{"OFFENSE_TYPE_ID":35,"OFFENSE_NAME":"Drug Equipment Violations","LOCATION_NAME":"Highway\/Road\/Alley\/Street\/Sidewalk","OFFENSE_COUNT":1},{"OFFENSE_TYPE_ID":35,"OFFENSE_NAME":"Drug Equipment Violations","LOCATION_NAME":"Parking\/Drop Lot\/Garage","OFFENSE_COUNT":3},{"OFFENSE_TYPE_ID":36,"OFFENSE_NAME":"Rape","LOCATION_NAME":"Air\/Bus\/Train Terminal","OFFENSE_COUNT":3},{"OFFENSE_TYPE_ID":39,"OFFENSE_NAME":"Weapon Law Violations","LOCATION_NAME":"Air\/Bus\/Train Terminal","OFFENSE_COUNT":63},{"OFFENSE_TYPE_ID":39,"OFFENSE_NAME":"Weapon Law Violations","LOCATION_NAME":"Convenience Store","OFFENSE_COUNT":1},{"OFFENSE_TYPE_ID":39,"OFFENSE_NAME":"Weapon Law Violations","LOCATION_NAME":"Grocery\/Supermarket","OFFENSE_COUNT":1},{"OFFENSE_TYPE_ID":39,"OFFENSE_NAME":"Weapon Law Violations","LOCATION_NAME":"Highway\/Road\/Alley\/Street\/Sidewalk","OFFENSE_COUNT":9},{"OFFENSE_TYPE_ID":39,"OFFENSE_NAME":"Weapon Law Violations","LOCATION_NAME":"Parking\/Drop Lot\/Garage","OFFENSE_COUNT":2},{"OFFENSE_TYPE_ID":39,"OFFENSE_NAME":"Weapon Law Violations","LOCATION_NAME":"Residence\/Home","OFFENSE_COUNT":1},{"OFFENSE_TYPE_ID":40,"OFFENSE_NAME":"Robbery","LOCATION_NAME":"Air\/Bus\/Train Terminal","OFFENSE_COUNT":133},{"OFFENSE_TYPE_ID":40,"OFFENSE_NAME":"Robbery","LOCATION_NAME":"Highway\/Road\/Alley\/Street\/Sidewalk","OFFENSE_COUNT":19},{"OFFENSE_TYPE_ID":40,"OFFENSE_NAME":"Robbery","LOCATION_NAME":"Parking\/Drop Lot\/Garage","OFFENSE_COUNT":13},{"OFFENSE_TYPE_ID":41,"OFFENSE_NAME":"Credit Card\/Automated Teller Machine Fraud","LOCATION_NAME":"Air\/Bus\/Train Terminal","OFFENSE_COUNT":2},{"OFFENSE_TYPE_ID":44,"OFFENSE_NAME":"Intimidation","LOCATION_NAME":"Air\/Bus\/Train Terminal","OFFENSE_COUNT":58},{"OFFENSE_TYPE_ID":44,"OFFENSE_NAME":"Intimidation","LOCATION_NAME":"Commercial\/Office Building","OFFENSE_COUNT":1},{"OFFENSE_TYPE_ID":44,"OFFENSE_NAME":"Intimidation","LOCATION_NAME":"Government\/Public Building","OFFENSE_COUNT":1},{"OFFENSE_TYPE_ID":44,"OFFENSE_NAME":"Intimidation","LOCATION_NAME":"Highway\/Road\/Alley\/Street\/Sidewalk","OFFENSE_COUNT":37},{"OFFENSE_TYPE_ID":44,"OFFENSE_NAME":"Intimidation","LOCATION_NAME":"Other\/Unknown","OFFENSE_COUNT":1},{"OFFENSE_TYPE_ID":45,"OFFENSE_NAME":"All Other Larceny","LOCATION_NAME":"Air\/Bus\/Train Terminal","OFFENSE_COUNT":165},{"OFFENSE_TYPE_ID":45,"OFFENSE_NAME":"All Other Larceny","LOCATION_NAME":"Commercial\/Office Building","OFFENSE_COUNT":2},{"OFFENSE_TYPE_ID":45,"OFFENSE_NAME":"All Other Larceny","LOCATION_NAME":"Government\/Public Building","OFFENSE_COUNT":1},{"OFFENSE_TYPE_ID":45,"OFFENSE_NAME":"All Other Larceny","LOCATION_NAME":"Highway\/Road\/Alley\/Street\/Sidewalk","OFFENSE_COUNT":21},{"OFFENSE_TYPE_ID":45,"OFFENSE_NAME":"All Other Larceny","LOCATION_NAME":"Other\/Unknown","OFFENSE_COUNT":4},{"OFFENSE_TYPE_ID":45,"OFFENSE_NAME":"All Other Larceny","LOCATION_NAME":"Parking\/Drop Lot\/Garage","OFFENSE_COUNT":3},{"OFFENSE_TYPE_ID":46,"OFFENSE_NAME":"Impersonation","LOCATION_NAME":"Commercial\/Office Building","OFFENSE_COUNT":2},{"OFFENSE_TYPE_ID":46,"OFFENSE_NAME":"Impersonation","LOCATION_NAME":"Parking\/Drop Lot\/Garage","OFFENSE_COUNT":1},{"OFFENSE_TYPE_ID":47,"OFFENSE_NAME":"Theft From Building","LOCATION_NAME":"Air\/Bus\/Train Terminal","OFFENSE_COUNT":4},{"OFFENSE_TYPE_ID":47,"OFFENSE_NAME":"Theft From Building","LOCATION_NAME":"Commercial\/Office Building","OFFENSE_COUNT":2},{"OFFENSE_TYPE_ID":47,"OFFENSE_NAME":"Theft From Building","LOCATION_NAME":"Government\/Public Building","OFFENSE_COUNT":3},{"OFFENSE_TYPE_ID":47,"OFFENSE_NAME":"Theft From Building","LOCATION_NAME":"Other\/Unknown","OFFENSE_COUNT":1},{"OFFENSE_TYPE_ID":47,"OFFENSE_NAME":"Theft From Building","LOCATION_NAME":"Parking\/Drop Lot\/Garage","OFFENSE_COUNT":1},{"OFFENSE_TYPE_ID":49,"OFFENSE_NAME":"Burglary\/Breaking & Entering","LOCATION_NAME":"Air\/Bus\/Train Terminal","OFFENSE_COUNT":1},{"OFFENSE_TYPE_ID":50,"OFFENSE_NAME":"Theft From Coin-Operated Machine or Device","LOCATION_NAME":"Commercial\/Office Building","OFFENSE_COUNT":2},{"OFFENSE_TYPE_ID":51,"OFFENSE_NAME":"Simple Assault","LOCATION_NAME":"Air\/Bus\/Train Terminal","OFFENSE_COUNT":500},{"OFFENSE_TYPE_ID":51,"OFFENSE_NAME":"Simple Assault","LOCATION_NAME":"Commercial\/Office Building","OFFENSE_COUNT":3},{"OFFENSE_TYPE_ID":51,"OFFENSE_NAME":"Simple Assault","LOCATION_NAME":"Government\/Public Building","OFFENSE_COUNT":1},{"OFFENSE_TYPE_ID":51,"OFFENSE_NAME":"Simple Assault","LOCATION_NAME":"Highway\/Road\/Alley\/Street\/Sidewalk","OFFENSE_COUNT":156},{"OFFENSE_TYPE_ID":51,"OFFENSE_NAME":"Simple Assault","LOCATION_NAME":"Other\/Unknown","OFFENSE_COUNT":1},{"OFFENSE_TYPE_ID":51,"OFFENSE_NAME":"Simple Assault","LOCATION_NAME":"Parking\/Drop Lot\/Garage","OFFENSE_COUNT":14},{"OFFENSE_TYPE_ID":56,"OFFENSE_NAME":"Fondling","LOCATION_NAME":"Air\/Bus\/Train Terminal","OFFENSE_COUNT":44},{"OFFENSE_TYPE_ID":56,"OFFENSE_NAME":"Fondling","LOCATION_NAME":"Highway\/Road\/Alley\/Street\/Sidewalk","OFFENSE_COUNT":11},{"OFFENSE_TYPE_ID":62,"OFFENSE_NAME":"Animal Cruelty","LOCATION_NAME":"Highway\/Road\/Alley\/Street\/Sidewalk","OFFENSE_COUNT":1}
+
+    ];
+
+
+    let offenseData = dataFromPython.reduce((acc, curr) => {
+        let offense = acc[curr.OFFENSE_NAME] || {total: 0, details: []};
+        offense.total += curr.OFFENSE_COUNT;
+        offense.details.push({location: curr.LOCATION_NAME, count: curr.OFFENSE_COUNT});
+        acc[curr.OFFENSE_NAME] = offense;
+        return acc;
+    }, {});
+
+    let sortedOffenses = Object.entries(offenseData)
+        .sort((a, b) => b[1].total - a[1].total)
+        .map(item => item[0]);
+
+    let sortedCounts = Object.entries(offenseData)
+        .sort((a, b) => b[1].total - a[1].total)
+        .map(item => item[1].total);
+
+    Plotly.newPlot('plot1', [{
+        x: sortedOffenses,
+        y: sortedCounts,
+        type: 'bar',
+        marker: {color: 'blue'},
+        name: 'Total Offenses'
+    }], {
+        title: 'Click an Offense to View Locations',
+        barmode: 'group',
+        xaxis: {tickangle: -45}
+    });
+
+    let locationData = dataFromPython.reduce((acc, curr) => {
+        acc[curr.LOCATION_NAME] = (acc[curr.LOCATION_NAME] || 0) + curr.OFFENSE_COUNT;
+        return acc;
+    }, {});
+
+    let sortedLocations = Object.entries(locationData)
+        .sort((a, b) => b[1] - a[1])
+        .map(item => item[0]);
+
+    let sortedLocationCounts = Object.entries(locationData)
+        .sort((a, b) => b[1] - a[1])
+        .map(item => item[1]);
+
+    Plotly.newPlot('plot2', [{
+        x: sortedLocations,
+        y: sortedLocationCounts,
+        type: 'bar',
+        name: 'Offense Locations'
+    }], {
+        title: 'Initial Overview: Count of Crimes by Location'
+    });
+
+    document.getElementById('plot1').on('plotly_click', function(data) {
+        if (data.points.length > 0) {
+            const selectedOffense = data.points[0].x;
+            let details = offenseData[selectedOffense].details;
+
+            details.sort((a, b) => b.count - a.count);
+
+            let locations = details.map(item => item.location);
+            let locationCounts = details.map(item => item.count);
+
+            Plotly.restyle('plot2', {
+                x: [locations],
+                y: [locationCounts]
+            });
+            Plotly.relayout('plot2', {
+                title: `Where are you more likely to face the following Offense: ${selectedOffense}` // Dynamically set title based on selected offense
+            });
+        }
+    });
+});
+</script>

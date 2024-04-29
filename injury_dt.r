@@ -14,12 +14,17 @@ injury_20 = merge(injury_20, injury_code, by.x = "INJURY_ID", by.y = "injury_id"
 injury_19 = merge(injury_19, injury_code, by.x = "INJURY_ID", by.y = "injury_id")
 injury_18 = merge(injury_18, injury_code, by.x = "INJURY_ID", by.y = "injury_id")
 
-injury_22_count = as.data.frame(table(injury_22$injury_name))
-injury_21_count = as.data.frame(table(injury_21$injury_name))
-injury_20_count = as.data.frame(table(injury_20$injury_name))
-injury_19_count = as.data.frame(table(injury_19$injury_name))
-injury_18_count = as.data.frame(table(injury_18$injury_name))
+# injury_22_count = as.data.frame(table(injury_22$injury_name))
+# injury_21_count = as.data.frame(table(injury_21$injury_name))
+# injury_20_count = as.data.frame(table(injury_20$injury_name))
+# injury_19_count = as.data.frame(table(injury_19$injury_name))
+# injury_18_count = as.data.frame(table(injury_18$injury_name))
 
+injury_22_count = as.data.frame(round(table(injury_22$injury_name)/nrow(injury_22)*100,2))
+injury_21_count = as.data.frame(round(table(injury_21$injury_name)/nrow(injury_21)*100,2))
+injury_20_count = as.data.frame(round(table(injury_20$injury_name)/nrow(injury_20)*100,2))
+injury_19_count = as.data.frame(round(table(injury_19$injury_name)/nrow(injury_19)*100,2))
+injury_18_count = as.data.frame(round(table(injury_18$injury_name)/nrow(injury_18)*100,2))
 
 injury_df = merge(merge(merge(merge(injury_18_count, injury_19_count, by = "Var1", all = TRUE), injury_20_count, by = "Var1", all = TRUE), injury_21_count, by = "Var1", all = TRUE), injury_22_count, by = "Var1", all = TRUE)
 colnames(injury_df) = c("Injury Type", "2018", "2019", "2020", "2021", "2022")

@@ -41,18 +41,12 @@ df = df %>%
     select(-state_name)
 
 # Plot bubble map
-df %>%
-  plot_geo(lat = ~lat, lon = ~lng) %>%
+map = plot_geo(df, lat = ~lat, lon = ~lng) %>%
   add_markers(
-    text = ~city, 
-    size = ~crime_rate, 
+    text = ~paste("State: ", state, "<br>City: ", city, "<br>Crime Rate: ", crime_rate, "<br>Population: ", population), 
+    size = ~population, 
     color = ~crime_rate,
-    marker = list(
-      sizemode = 'area',  
-      sizeref = 0.2       
-    )
-  ) %>%
-  layout(
-    title = 'US Cities Crime Rate Map', 
-    geo = list(scope = 'usa')
-  )
+    marker = list(sizemode = 'area', sizeref = 0.2)) %>%
+    colorbar(title = "Crime Rate") %>%
+  layout(title = 'Crime Rate Bubble Map for US cities in 2019', geo = list(scope = 'usa'))
+map
