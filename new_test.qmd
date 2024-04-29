@@ -33,32 +33,87 @@ format: html
 });
 
 
+// function initializePlots() {
+//     Plotly.newPlot('plot1', [{
+//         y: [],
+//         x: [],
+//         type: 'bar',
+//         orientation: 'h',  // Horizontal bar chart
+//         marker: {color: 'blue'},
+//         name: 'Total Offenses'
+//     }], {
+//         automargin: true,
+//         title: 'Click an Offense to View Locations',
+//         margin: {l: 350, r: 50, t: 50, b: 50}  // Increase left margin to ensure labels fit
+//     });
+
+//     Plotly.newPlot('plot2', [{
+//         y: [],
+//         x: [],
+//         type: 'bar',
+//         orientation: 'h',  // Horizontal bar chart
+//         marker: {color: 'green'},
+//         name: 'Offense Locations'
+//     }], {
+//         title: 'Details for Selected Offense',
+//         automargin: true,
+//         margin: {l: 350, r: 50, t: 50, b: 50}  // Same increased margin for consistency
+//     });
+// }
+
 function initializePlots() {
+    let layout = {
+        title: 'Click an Offense to View Locations',
+        margin: {l: 350, r: 50, t: 50, b: 50}, // Increased margin to fit long labels
+        paper_bgcolor: 'rgba(255,255,255,1)', // Pure white background for the plot area
+        plot_bgcolor: 'rgba(247, 247, 247, 1)', // Light gray for the plotting area to differentiate from the background
+        font: {
+            family: 'Helvetica Neue, Helvetica, Arial, sans-serif', // A clean, modern font
+            size: 14, // Slightly larger font size for readability
+            color: '#333333' // Dark grey color for better readability
+        },
+        xaxis: {
+            tickfont: {
+                size: 12 // Smaller font for axis ticks to ensure they do not overlap
+            }
+        },
+        yaxis: {
+            tickfont: {
+                size: 14 // Ensure axis labels are legible
+            }
+        }
+    };
+
     Plotly.newPlot('plot1', [{
         y: [],
         x: [],
         type: 'bar',
-        orientation: 'h',  // Horizontal bar chart
-        marker: {color: 'blue'},
+        orientation: 'h', // Horizontal bar chart
+        marker: {
+            color: '#17BECF', // A soft teal color for a soothing aesthetic
+            line: {
+                color: '#168FA8', // A darker teal for border, adding depth
+                width: 1.5 // Thicker border for clear separation
+            }
+        },
         name: 'Total Offenses'
-    }], {
-        automargin: true,
-        title: 'Click an Offense to View Locations',
-        margin: {l: 350, r: 50, t: 50, b: 50}  // Increase left margin to ensure labels fit
-    });
+    }], layout);
 
+    layout.title = 'Details for Selected Offense'; // Adjust title for the second plot
     Plotly.newPlot('plot2', [{
         y: [],
         x: [],
         type: 'bar',
-        orientation: 'h',  // Horizontal bar chart
-        marker: {color: 'green'},
+        orientation: 'h', // Horizontal bar chart
+        marker: {
+            color: '#FF7F0E', // A vibrant orange for contrast with the teal
+            line: {
+                color: '#D65F0A', // A darker shade of orange for the border
+                width: 1.5 // Thicker border for clear separation
+            }
+        },
         name: 'Offense Locations'
-    }], {
-        title: 'Details for Selected Offense',
-        automargin: true,
-        margin: {l: 350, r: 50, t: 50, b: 50}  // Same increased margin for consistency
-    });
+    }], layout);
 }
 
 function processDataAndPlot(dataFromPython) {
