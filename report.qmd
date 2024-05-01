@@ -1,5 +1,5 @@
 ---
-title: "Washington D.C. Crime"
+title: "Clueing in DC: An Analysis of DC Crime Data from 2018-2022"
 subtitle: "DSAN 5200 Final Project"
 date: 04/29/2024
 author:
@@ -10,17 +10,7 @@ author:
         city: Washington
         state: DC
   - name: Powell Sheagren
-    affiliations:
-    - id: gu
-      name: Georgetown University
-      city: Washington
-      state: DC
   - name: Dheeraj Oruganty
-    affiliations:
-      - id: gu
-        name: Georgetown University
-        city: Washington
-        state: DC
 toc: true
 format: 
     html:   
@@ -29,51 +19,182 @@ format:
         page-layout: full
 ---
 
-# Introduction 
+```{r python_libary}
+#| echo: false
+library(reticulate)
+use_condaenv('dsan5200', required=T)
+```
 
-Intro
+## Introduction
 
-# View 1
+## Figure 1: Comparing Crime Across Cities in 2019
 
 ```{r map}
-#| fig-cap: "Fig 1: The size of the marker is by the population and the color is by the crime rate."
+#| fig-cap: "Figure 1: This map represents the relative population and crime rates in the U.S. cities. The size of the dots shows the population of the city and the color represents the amount of crime per 100,000 people."
 #| warning: false
 #| message: false
 #| code-fold: true
-#| file: ./map.r
+#| file: ./codes/map.r
 ```
 
-# View 2
+https://en.wikipedia.org/wiki/List_of_United_States_cities_by_crime_rate
+https://simplemaps.com/data/us-cities
+
+## Figure 2: Crime Proportions in DC From 2018-2022
 
 ```{r datatable}
-#| fig-cap: "Fig 2: caption 2"
+#| fig-cap: "Figure 2: Data was collected from the 2018-2022 FBI’s National Incident-Based Reporting System. The values are the percentage of a total crime that an individual offense made up."
 #| warning: false
 #| message: false
 #| code-fold: true
-#| file: ./offense_type_dt.r
+#| file: ./codes/offense_type_dt.r
 ```
 
-# View 3
+## Figure 3: Relationships Between Offenses Within Incidents
 
-```{r network}
-#| fig-cap: caption 3
-#| warning: false
-#| message: false
+```{python network}
+#| fig-cap: "Figure 3: The network diagram shows data from all years where one incident involved multiple offenses. The lines represent connections between crimes and the size of the nodes mean the amount of times the crime was connected to another."
 #| code-fold: true
-#| file: ./network.r
+import plotly.graph_objects as go
+import numpy as np
+import networkx as nx
+
+## Code for this graph generously donated from:
+# https://plotly.com/python/network-graphs/
+
+## importing matrix
+matrix = np.genfromtxt('./data/adjacency_matrix.csv', delimiter = ",")
+# list = np.genfromtxt('Adjacency_list.csv', delimiter = ",")
+
+## Turning adjacency matrix to graph obkect
+G = nx.from_numpy_array(matrix,create_using=nx.DiGraph)
+
+## Using a spiral layout to show centrality
+pos = nx.spiral_layout(G)
+
+## Adding position based on the layout
+for i in range(0,42):
+    for g in range(0,42):
+        G.nodes[i]['pos'] = pos[i]
+        G.nodes[g]['pos'] = pos[g]
+
+## Adding edges together
+edge_x = []
+edge_y = []
+for edge in G.edges():
+    x0, y0 = G.nodes[edge[0]]['pos']
+    x1, y1 = G.nodes[edge[1]]['pos']
+    edge_x.append(x0)
+    edge_x.append(x1)
+    edge_x.append(None)
+    edge_y.append(y0)
+    edge_y.append(y1)
+    edge_y.append(None)
+
+## arranging them into lines
+edge_trace = go.Scatter(
+    x=edge_x, y=edge_y,
+    line=dict(width=0.5, color='#888'),
+    hoverinfo='none',
+    mode='lines')
+
+## adding nodes to graph
+node_x = []
+node_y = []
+for node in G.nodes():
+    x, y = pos[node]
+    node_x.append(x)
+    node_y.append(y)
+
+## assembly again
+node_trace = go.Scatter(
+    x=node_x, y=node_y,
+    mode='markers',
+    hoverinfo='text',
+    marker=dict(
+        showscale=True,
+        # colorscale options
+        #'Greys' | 'YlGnBu' | 'Greens' | 'YlOrRd' | 'Bluered' | 'RdBu' |
+        #'Reds' | 'Blues' | 'Picnic' | 'Rainbow' | 'Portland' | 'Jet' |
+        #'Hot' | 'Blackbody' | 'Earth' | 'Electric' | 'Viridis' |
+        colorscale = ["#E63946", "#F1FAEE", "#A8DADC", "#457B9D", "#1D3557"],
+        reversescale=True,
+        color=[],
+        size=10,
+        colorbar=dict(
+            thickness=15,
+            title='Node Connections',
+            xanchor='left',
+            titleside='right'
+        ),
+        line_width=2))
+
+## Offenses for tooltip
+offenses_list = [ "Destruction/Damage/Vandalism of Property",    "Theft From Motor Vehicle"  ,                 
+  "Robbery"                      ,               "Simple Assault"           ,                  
+  "Intimidation"                 ,               "All Other Larceny"         ,                 
+  "Motor Vehicle Theft"           ,              "Drug Equipment Violations" ,                 
+ "Drug/Narcotic Violations"     ,               "Weapon Law Violations"     ,                 
+ "Stolen Property Offenses"     ,               "Aggravated Assault"        ,                 
+ "Purse-snatching"              ,               "Extortion/Blackmail"         ,               
+ "Theft From Building"          ,               "Fondling"                  ,                 
+ "Counterfeiting/Forgery"       ,               "Theft of Motor Vehicle Parts or Accessories",
+ "Credit Card/Automated Teller Machine Fraud" , "Impersonation"      ,                        
+ "Pocket-picking"                     ,         "Kidnapping/Abduction"     ,                  
+ "False Pretenses/Swindle/Confidence Game"   ,  "Burglary/Breaking & Entering"       ,        
+ "Rape"                      ,                  "Murder and Nonnegligent Manslaughter"   ,    
+ "Theft From Coin-Operated Machine or Device" , "Animal Cruelty"          ,                   
+ "Shoplifting"             ,                    "Hacking/Computer Invasion"      ,            
+ "Identity Theft"         ,                     "Wire Fraud"                ,                 
+ "Arson"                 ,                      "Betting/Wagering"         ,                  
+ "Welfare Fraud"        ,                       "Pornography/Obscene Material"     ,          
+ "Bribery"           ,                          "Purchasing Prostitution"       ,             
+ "Prostitution"                 ,               "Sodomy"                 ,                    
+ "Sexual Assault With An Object", "Other"]
+
+# getting tooltip
+node_adjacencies = []
+node_text = []
+for node, adjacencies in enumerate(G.adjacency()):
+    node_adjacencies.append(len(adjacencies[1]))
+    node_text.append('# of connections: '+str(len(adjacencies[1])) + " | Offense Type: " + offenses_list[node])
+
+node_trace.marker.color = node_adjacencies
+node_trace.text = node_text
+
+## Plotting the figure
+fig = go.Figure(data=[edge_trace, node_trace],
+             layout=go.Layout(
+                title='Amount of times an Offense is Listed with other Ofenses',
+                titlefont_size=16,
+                showlegend=False,
+                hovermode='closest',
+                margin=dict(b=20,l=5,r=5,t=40),
+                annotations=[ dict(
+                    text="",
+                    showarrow=False,
+                    xref="paper", yref="paper",
+                    x=0.005, y=-0.002 ) ],
+                xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
+                yaxis=dict(showgrid=False, zeroline=False, showticklabels=False)
+                ))
+# fig.update_traces(marker = dict(size = node_adjacencies));
+fig.update_traces(marker=dict(size=node_adjacencies, colorbar_title='Interaction Count'));
+fig.show()
 ```
 
-# View 4
+## Figure 4: Offense by Relationship to Victim Heatmap
 
 ```{r heatmap}
-#| fig-cap: caption 3
 #| warning: false
 #| message: false
 #| code-fold: true
-#| file: ./heatmap.r
+#| file: ./codes/heatmap.r
 ```
 
-# View 5
+Fig 4: This heat map shows the amount, by color, of each offense category scaled by each row and what the relationship of the victim was to the offender for the amount.
+
+## Figure 5: Interactive Location of Offenses in 2018, 2020, 2022
 
 ```{=html}
 <button id="dataset2018Button">Dataset 2018</button>
@@ -133,56 +254,114 @@ Intro
 //     });
 // }
 
+// function initializePlots() {
+//     let layout1 = {
+//         title: 'Total Offenses by Type', // Specific title for the first plot
+//         margin: {l: 350, r: 50, t: 50, b: 50}, // Increased margin to fit long labels
+//         paper_bgcolor: 'rgba(255,255,255,1)', // Pure white background for the plot area
+//         plot_bgcolor: 'rgba(247, 247, 247, 1)', // Light gray for the plotting area to differentiate from the background
+//         font: {
+//             family: 'Helvetica Neue, Helvetica, Arial, sans-serif', // A clean, modern font
+//             size: 14, // Slightly larger font size for readability
+//             color: '#333333' // Dark grey color for better readability
+//         },
+//         xaxis: {
+//             tickfont: {
+//                 size: 12 // Smaller font for axis ticks to ensure they do not overlap
+//             }
+//         },
+//         yaxis: {
+//             tickfont: {
+//                 size: 14 // Ensure axis labels are legible
+//             }
+//         }
+//     };
+
+//     Plotly.newPlot('plot1', [{
+//         y: [],
+//         x: [],
+//         type: 'bar',
+//         orientation: 'h', // Horizontal bar chart
+//         marker: {
+//             color: '#17BECF', // A soft teal color
+//             line: {
+//                 color: '#168FA8', // A darker teal for border
+//                 width: 1.5 // Thicker border
+//             }
+//         },
+//         name: 'Total Offenses'
+//     }], layout1);
+
+//     let layout2 = Object.assign({}, layout1, {title: 'Details for Selected Offense'}); // Clone layout1 and update the title
+
+//     Plotly.newPlot('plot2', [{
+//         y: [],
+//         x: [],
+//         type: 'bar',
+//         orientation: 'h', // Horizontal bar chart
+//         marker: {
+//             color: '#FF7F0E', // A vibrant orange
+//             line: {
+//                 color: '#D65F0A', // A darker shade of orange
+//                 width: 1.5 // Thicker border
+//             }
+//         },
+//         name: 'Offense Locations'
+//     }], layout2);
+// }
+
+
+
 function initializePlots() {
-    let layout1 = {
-        title: 'Total Offenses by Type', // Specific title for the first plot
-        margin: {l: 350, r: 50, t: 50, b: 50}, // Increased margin to fit long labels
-        paper_bgcolor: 'rgba(255,255,255,1)', // Pure white background for the plot area
-        plot_bgcolor: 'rgba(247, 247, 247, 1)', // Light gray for the plotting area to differentiate from the background
+    let baseLayout = {
+        margin: {l: 300, r: 50, t: 50, b: 50},
+        paper_bgcolor: '#f1f1f1',
+        plot_bgcolor: '#fafafa',
         font: {
-            family: 'Helvetica Neue, Helvetica, Arial, sans-serif', // A clean, modern font
-            size: 14, // Slightly larger font size for readability
-            color: '#333333' // Dark grey color for better readability
+            family: 'Helvetica Neue, Helvetica, Arial, sans-serif',
+            size: 14,
+            color: '#333333'
         },
         xaxis: {
             tickfont: {
-                size: 12 // Smaller font for axis ticks to ensure they do not overlap
+                size: 12
             }
         },
         yaxis: {
             tickfont: {
-                size: 14 // Ensure axis labels are legible
+                size: 14
             }
         }
     };
+
+    let layout1 = Object.assign({}, baseLayout, {title: 'Comparing Offense type to Location Type'});
+    let layout2 = Object.assign({}, baseLayout, {title: 'Details for Selected Offense'});
 
     Plotly.newPlot('plot1', [{
         y: [],
         x: [],
         type: 'bar',
-        orientation: 'h', // Horizontal bar chart
+        orientation: 'h',
         marker: {
-            color: '#17BECF', // A soft teal color
+            color: '#E63946',
             line: {
-                color: '#168FA8', // A darker teal for border
-                width: 1.5 // Thicker border
+                color: '#C53034',
+                width: 1.5
             }
         },
         name: 'Total Offenses'
     }], layout1);
 
-    let layout2 = Object.assign({}, layout1, {title: 'Details for Selected Offense'}); // Clone layout1 and update the title
-
     Plotly.newPlot('plot2', [{
         y: [],
         x: [],
         type: 'bar',
-        orientation: 'h', // Horizontal bar chart
+        orientation: 'h',
         marker: {
-            color: '#FF7F0E', // A vibrant orange
+            color: '#1D3557',
             line: {
-                color: '#D65F0A', // A darker shade of orange
-                width: 1.5 // Thicker border
+                color: '#162A40',
+                width: 1.5
             }
         },
         name: 'Offense Locations'
@@ -190,6 +369,8 @@ function initializePlots() {
 }
 
 function processDataAndPlot(dataFromPython) {
+    console.log('Updating data for plot1 and plot2');
+
     let offenseData = dataFromPython.reduce((acc, curr) => {
         let offense = acc[curr.OFFENSE_NAME] || {total: 0, details: []};
         offense.total += curr.OFFENSE_COUNT;
@@ -200,37 +381,30 @@ function processDataAndPlot(dataFromPython) {
 
     let sortedOffenses = Object.entries(offenseData)
         .sort((a, b) => b[1].total - a[1].total)
-        .slice(0, 10)  // Take only the top 10 offenses
+        .slice(0, 10)
         .map(item => item[0]);
 
     let sortedCounts = Object.entries(offenseData)
         .sort((a, b) => b[1].total - a[1].total)
-        .slice(0, 10)  // Corresponding counts for the top 10
+        .slice(0, 10)
         .map(item => item[1].total);
 
     Plotly.restyle('plot1', {y: [sortedOffenses.reverse()], x: [sortedCounts.reverse()]});
-    Plotly.restyle('plot2', {y: [[]], x: [[]]}); // Clear plot2 when switching datasets
+    Plotly.restyle('plot2', {y: [[]], x: [[]]});
 
     document.getElementById('plot1').on('plotly_click', function(data) {
+        console.log('plot1 clicked, updating plot2');
         if (data.points.length > 0) {
             const selectedOffense = data.points[0].y;
             let details = offenseData[selectedOffense].details;
-
-            if (details) {
-                details.sort((a, b) => b.count - a.count);
-
-                let locations = details.slice(0, 10).map(item => item.location); // Top 10 locations for the selected offense
-                let locationCounts = details.slice(0, 10).map(item => item.count);
-
-                Plotly.restyle('plot2', {y: [locations.reverse()], x: [locationCounts.reverse()]});
-                Plotly.relayout('plot2', {
-                    title: `Locations for Offense: ${selectedOffense}` // Update title dynamically
-                });
-            }
+            details.sort((a, b) => b.count - a.count);
+            let locations = details.slice(0, 10).map(item => item.location);
+            let locationCounts = details.slice(0, 10).map(item => item.count);
+            Plotly.restyle('plot2', {y: [locations.reverse()], x: [locationCounts.reverse()]});
+            Plotly.relayout('plot2', {title: `Locations for Offense: ${selectedOffense}`});
         }
     });
 }
-
 
 function attachButtonHandlers() {
     document.getElementById('dataset2018Button').addEventListener('click', () => {
@@ -246,30 +420,34 @@ function attachButtonHandlers() {
 </script>
 ```
 
-# View 6
+Figure 5: Interactive Visualization of Top 15 Crime Incidents by Location in Washington D.C. for the Years 2018, 2020, and 2022
+
+## Figure 6: Sankey Diagram of Weapon Type and Injury by Offense
 
 <div style="display: flex; justify-content: space-between;">
 <div style="width: 48%; margin-left: 2%;">
 ```{r sankey18}
-#| fig-cap: fff
 #| column: screen
 #| warning: false
 #| message: false
 #| code-fold: true
-#| file: ./sankey_18.r
+#| file: ./codes/sankey_18.r
 ```
 </div>
 
 <div style="width: 48%; margin-right: 2%;">
 ```{r sankey22}
-#| fig-cap: caption 5
 #| column: screen
 #| warning: false
 #| message: false
 #| code-fold: true
-#| file: ./sankey_22.r
+#| file: ./codes/sankey_22.r
 ```
 </div>
 </div>
 
-# Conclusion
+Figure 6: This sankey diagram shows the offenses, the weapons used, and the amount of injury caused in 2018 and 2022. The paths between the values show the flow of this amount.
+
+
+
+## Conclusion
