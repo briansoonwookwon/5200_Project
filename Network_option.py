@@ -13,7 +13,7 @@ list = np.genfromtxt('Adjacency_list.csv', delimiter = ",")
 G = nx.from_numpy_array(matrix,create_using=nx.DiGraph)
 
 ## Using a spiral layout to show centrality
-pos = nx.spiral_layout(G)
+pos = nx.shell_layout(G)
 
 ## Adding position based on the layout
 for i in range(0,42):
@@ -60,7 +60,7 @@ node_trace = go.Scatter(
         #'Greys' | 'YlGnBu' | 'Greens' | 'YlOrRd' | 'Bluered' | 'RdBu' |
         #'Reds' | 'Blues' | 'Picnic' | 'Rainbow' | 'Portland' | 'Jet' |
         #'Hot' | 'Blackbody' | 'Earth' | 'Electric' | 'Viridis' |
-        colorscale='YlGnBu',
+        colorscale = ["#E63946", "#F1FAEE", "#A8DADC", "#457B9D", "#1D3557"],
         reversescale=True,
         color=[],
         size=10,
@@ -100,7 +100,7 @@ node_adjacencies = []
 node_text = []
 for node, adjacencies in enumerate(G.adjacency()):
     node_adjacencies.append(len(adjacencies[1]))
-    node_text.append('# of connections: '+str(len(adjacencies[1])) + " | Offense Type: " + offenses_list[node])
+    node_text.append("Offense Type: " + offenses_list[node] + ' | # of connections: '+str(len(adjacencies[1])))
 
 node_trace.marker.color = node_adjacencies
 node_trace.text = node_text
@@ -108,7 +108,7 @@ node_trace.text = node_text
 ## Plotting the figure
 fig = go.Figure(data=[edge_trace, node_trace],
              layout=go.Layout(
-                title='Amount of times an Offense is Listed with other Ofenses',
+                title='Amount of times an Offense was Listed with other Offenses',
                 titlefont_size=16,
                 showlegend=False,
                 hovermode='closest',
@@ -121,4 +121,7 @@ fig = go.Figure(data=[edge_trace, node_trace],
                 xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
                 yaxis=dict(showgrid=False, zeroline=False, showticklabels=False))
                 )
+
+fig.update_traces(marker=dict(size=node_adjacencies))
+
 fig.show()
